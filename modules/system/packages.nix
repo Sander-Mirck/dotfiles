@@ -26,7 +26,7 @@
     vesktop
     kdePackages.kdenlive
     bat
-    spotify
+    spotube
   ];
 
   # Enable Firefox (from unstable too)
