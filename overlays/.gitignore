@@ -1,0 +1,14 @@
+# Ignore Nix build results and garbage collection symlinks
+/result*
+/gcroots/
+
+# A common pattern is to store secrets in a directory that is encrypted
+# by another tool (like sops-nix or agenix). We will ignore this
+# directory by default to prevent accidental commits.
+/secrets/
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
