@@ -19,6 +19,7 @@
     ../../modules/system/services.nix
     ../../modules/system/sudo.nix
     ../../modules/system/user-sander.nix # System-level user definition
+    ../../modules/system/virtualisation.nix
 
     # Import Home Manager modules.
     inputs.home-manager.nixosModules.home-manager

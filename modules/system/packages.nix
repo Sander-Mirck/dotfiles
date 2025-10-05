@@ -27,6 +27,7 @@
     kdePackages.kdenlive
     bat
     autopsy
+    zulu8
   ];
 
   # Enable Firefox (from unstable too)
