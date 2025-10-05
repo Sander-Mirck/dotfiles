@@ -26,6 +26,7 @@
     vesktop
     kdePackages.kdenlive
     bat
+    autopsy
   ];
 
   # Enable Firefox (from unstable too)
