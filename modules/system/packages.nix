@@ -2,33 +2,39 @@
 { config, pkgs, unstable, ... }:
 
 {
-
-  # Core packages (all from unstable)
-  environment.systemPackages = with unstable; [
-    git
-    wget
-    curl
-    btop
-    unzip
-    neovim
-    ghostty
-    docker
-    docker-compose
-    lazygit
-    ripgrep
-    fd
-    tree
-    vscodium
-    firefox
-    flatpak
-    ocs-url
-    gnome-tweaks
-    vesktop
-    kdePackages.kdenlive
-    bat
-    autopsy
-    zulu8
-  ];
+  environment.systemPackages =
+    # Packages from the stable channel
+    [
+      pkgs.bloomeetunes
+      pkgs.autopsy # Example: Assuming you want this from stable too
+      pkgs.zulu8   # Example: And this one
+    ]
+    # '++' joins the two lists together
+    ++
+    # Packages from the unstable channel
+    (with unstable; [
+      git
+      wget
+      curl
+      btop
+      unzip
+      neovim
+      ghostty
+      docker
+      docker-compose
+      lazygit
+      ripgrep
+      fd
+      tree
+      vscodium
+      firefox
+      flatpak
+      ocs-url
+      gnome-tweaks
+      vesktop
+      kdePackages.kdenlive
+      bat
+    ]);
 
   # Enable Firefox (from unstable too)
   programs.firefox.package = unstable.firefox;
@@ -49,4 +55,3 @@
     binfmt = true;
   };
 }
-
