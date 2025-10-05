@@ -42,5 +42,11 @@
     nrgc = "sudo nix-collect-garbage -d";
     nix-update = "sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade";
   };
+
+  # Appimage support
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 }
 
