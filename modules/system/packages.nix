@@ -34,6 +34,7 @@
       vesktop
       kdePackages.kdenlive
       bat
+      scrcpy
     ]);
 
   # Enable Firefox (from unstable too)
@@ -56,5 +57,3 @@
   };
 }
 
-
-# Test
