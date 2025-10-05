@@ -6,8 +6,6 @@
     # Packages from the stable channel
     [
       pkgs.bloomeetunes
-      pkgs.autopsy # Example: Assuming you want this from stable too
-      pkgs.zulu8   # Example: And this one
     ]
     # '++' joins the two lists together
     ++
