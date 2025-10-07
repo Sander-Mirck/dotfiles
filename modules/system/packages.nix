@@ -33,6 +33,8 @@
       kdePackages.kdenlive
       bat
       scrcpy
+      localsend
+      tailscale
     ]);
 
   # Enable Firefox (from unstable too)
