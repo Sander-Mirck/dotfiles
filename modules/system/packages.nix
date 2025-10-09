@@ -35,6 +35,9 @@
       scrcpy
       localsend
       tailscale
+      python3
+      tmux
+      godot_4
     ]);
 
   # Enable Firefox (from unstable too)
