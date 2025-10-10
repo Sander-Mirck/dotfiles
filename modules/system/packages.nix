@@ -38,6 +38,9 @@
       python3
       tmux
       godot_4
+      cloudflared
+      whatsapp-electron
+      rPackages.telegram
     ]);
 
   # Enable Firefox (from unstable too)
