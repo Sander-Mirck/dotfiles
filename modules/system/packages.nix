@@ -40,6 +40,8 @@
       godot_4
       cloudflared
       whatsapp-electron
+      python312
+      nix-output-monitor
     ]);
 
   # Enable Firefox (from unstable too)
