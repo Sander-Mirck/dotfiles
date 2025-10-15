@@ -42,6 +42,7 @@
       whatsapp-electron
       python312
       nix-output-monitor
+      obsidian
     ]);
 
   # Enable Firefox (from unstable too)
