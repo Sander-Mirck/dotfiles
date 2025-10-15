@@ -1,5 +1,6 @@
+# /etc/nixos/hosts/nixos/services.nix
 # System services
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # X11 + GNOME
@@ -14,21 +15,9 @@
   # Enable Docker service
   virtualisation.docker.enable = true;
 
-  # Enable Flatpak system-wide
+  # Enable Flatpak system-wide.
+  # This automatically handles making Flatpak apps visible in GNOME.
   services.flatpak.enable = true;
-
-  # Ensure Flatpak apps' .desktop files are visible in GNOME
-  environment.sessionVariables.XDG_DATA_DIRS = lib.mkForce
-    "/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share";
-
-  # Automatically add Flathub remote for all users
-  systemd.services.flatpak-repo = {
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.flatpak ];
-    script = ''
-      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    '';
-  };
 
   # Enable the Tailscale service
   services.tailscale.enable = true;
