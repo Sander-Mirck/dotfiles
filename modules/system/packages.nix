@@ -43,6 +43,7 @@
       python312
       nix-output-monitor
       obsidian
+      gitbutler
     ]);
 
   # Enable Firefox (from unstable too)

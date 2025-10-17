@@ -19,6 +19,13 @@
     gnomeExtensions.user-themes
   ];
 
+  # Enable and configure git
+  programs.git = {
+    enable = true;
+    userName = "Sander Mirck";
+    userEmail = "sandermirck@gmail.com";
+  };
+
   # GNOME and dconf settings for declarative management
   dconf.enable = true; # Ensures dconf settings are applied
 
