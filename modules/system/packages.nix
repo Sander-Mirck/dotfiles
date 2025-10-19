@@ -43,6 +43,7 @@
       python312
       nix-output-monitor
       obsidian
+      lutris
     ]);
 
   # Enable Firefox (from unstable too)
