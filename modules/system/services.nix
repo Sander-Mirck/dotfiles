@@ -21,4 +21,7 @@
 
   # Enable the Tailscale service
   services.tailscale.enable = true;
+
+  # Enable the Netbird service
+  services.netbird.enable = true;
 }

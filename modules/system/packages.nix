@@ -44,6 +44,8 @@
       nix-output-monitor
       obsidian
       lutris
+      netbird-ui
+      modrinth-app
     ]);
 
   # Enable Firefox (from unstable too)
