@@ -45,6 +45,7 @@
       obsidian
       lutris
       netbird-ui
+      prismlauncher
     ]);
 
   # Enable Firefox (from unstable too)
