@@ -10,7 +10,6 @@
   users.users.sander.extraGroups = [ "libvirtd" ];
 
   environment.systemPackages = with pkgs; [
-    qemu
     virt-manager
     virt-viewer
     dnsmasq

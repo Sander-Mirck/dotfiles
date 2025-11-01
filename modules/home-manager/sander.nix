@@ -22,13 +22,15 @@
   # Enable and configure git
   programs.git = {
     enable = true;
-    userName = "Sander Mirck";
-    userEmail = "sandermirck@gmail.com";
+    settings = {
+      user = {
+        name = "Sander Mirck";
+        email = "sandermirck@gmail.com";
+      };
+    };
   };
 
   # GNOME and dconf settings for declarative management
-  dconf.enable = true; # Ensures dconf settings are applied
-
   dconf.settings = {
     "org/gnome/shell" = {
       # This is the crucial part: list the extensions to enable by their UUID

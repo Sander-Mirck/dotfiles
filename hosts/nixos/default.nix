@@ -32,17 +32,4 @@
   # System state version
   system.stateVersion = "25.05";
 
-  # Home Manager configuration for the system
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = {
-      unstable = import inputs.nixpkgs-unstable {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
-    };
-    # Define users and their home-manager configurations
-    users.sander = import ../../modules/home-manager/sander.nix;
-  };
 }

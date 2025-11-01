@@ -1,16 +1,10 @@
 # Package management and system packages
-{ config, pkgs, unstable, ... }:
+{ config, pkgs, ... }:
 
 {
   environment.systemPackages =
-    # Packages from the stable channel
-    [
-      pkgs.bloomeetunes
-    ]
-    # '++' joins the two lists together
-    ++
-    # Packages from the unstable channel
-    (with unstable; [
+    # All packages are from the unstable channel
+    (with pkgs; [
       git
       wget
       curl
@@ -18,8 +12,6 @@
       unzip
       neovim
       ghostty
-      docker
-      docker-compose
       lazygit
       ripgrep
       fd
@@ -35,12 +27,10 @@
       scrcpy
       localsend
       tailscale
-      python3
       tmux
       godot_4
       cloudflared
       whatsapp-electron
-      python312
       nix-output-monitor
       obsidian
       lutris
@@ -49,7 +39,7 @@
     ]);
 
   # Enable Firefox (from unstable too)
-  programs.firefox.package = unstable.firefox;
+  programs.firefox.package = pkgs.firefox;
 
   # Shell aliases for Nix commands
   environment.shellAliases = {
