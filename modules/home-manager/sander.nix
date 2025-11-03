@@ -61,6 +61,6 @@
 
   # Let Home Manager manage its own session variables
   home.sessionVariables = {
-    EDITOR = "nvim";
+    EDITOR = "gnome-text-editor";
   };
 }

@@ -10,7 +10,6 @@
       curl
       btop
       unzip
-      neovim
       ghostty
       lazygit
       ripgrep
@@ -36,6 +35,7 @@
       lutris
       netbird-ui
       prismlauncher
+      evil-helix
     ]);
 
   # Enable Firefox (from unstable too)
