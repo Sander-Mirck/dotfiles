@@ -19,8 +19,8 @@
     gnomeExtensions.user-themes
     
     # Security and system tools
-    bitwarden
-    gpg
+    bitwarden-desktop
+    gnupg
     keepassxc
   ];
 

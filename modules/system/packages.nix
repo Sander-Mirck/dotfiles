@@ -44,6 +44,7 @@
       pciutils  # PCI device info
       smartmontools  # SMART monitoring for drives
       hddtemp  # Hard drive temperature monitoring
+      emacs
     ]);
 
   # Enable Firefox (from unstable too)
