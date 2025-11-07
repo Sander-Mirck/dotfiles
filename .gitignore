@@ -2,13 +2,57 @@
 /result*
 /gcroots/
 
+# Nix-specific files
+.nix*
+!flake.nix
+!flake.lock
+
 # A common pattern is to store secrets in a directory that is encrypted
 # by another tool (like sops-nix or agenix). We will ignore this
 # directory by default to prevent accidental commits.
 /secrets/
+*.key
+*.gpg
+*.asc
 
-# Ignore IDE/editor-specific files
+# Temporary files and logs
+*.tmp
+*.log
+*~
+
+# Cache directories
+.cache/
+.var/
+.tmp/
+
+# Configuration that might contain sensitive data
+.ssh/
+.gnupg/
+.config/htop/
+.config/nixpkgs/
+
+# IDE/editor-specific files
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# System-specific files
+/etc/
+/run/
+/proc/
+/sys/
+
+# Build-related ignores
+dist/
+build/
+*.o
+*.so
+*.dylib
+
+# Secrets and credentials
+*.env
+.envrc
+secrets.nix
+.password
+.credentials

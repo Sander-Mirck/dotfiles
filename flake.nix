@@ -17,7 +17,7 @@
       specialArgs = {
         inherit inputs;
       };
-# test      
+      
       modules = [
         # Import the host-specific configuration
         ./hosts/nixos
@@ -36,6 +36,14 @@
         ({ config, pkgs, ... }: {
           nixpkgs.overlays = [ (import ./overlays) ];
         })
+      ];
+    };
+    
+    # Additional outputs for development
+    devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
+      packages = [ 
+        nixpkgs.legacyPackages.x86_64-linux.git 
+        nixpkgs.legacyPackages.x86_64-linux.nil  # Nix language server
       ];
     };
   };

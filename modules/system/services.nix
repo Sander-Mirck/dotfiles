@@ -21,4 +21,14 @@
 
   # Enable the Netbird service
   services.netbird.enable = true;
+  
+  # Security and system services
+  services.gnome.gnome-keyring.enable = true;  # Enable keyring for password management
+  services.udisks2.enable = true;  # Enable automatic mounting of removable media
+  
+  # Better logging
+  services.journald.extraConfig = ''
+    SystemMaxUse=100M
+    SystemMaxFileSize=10M
+  '';
 }

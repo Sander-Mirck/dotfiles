@@ -1,5 +1,5 @@
 # /etc/nixos/modules/home-manager/sander.nix
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # Set your basic user information
@@ -17,6 +17,11 @@
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.dash-to-dock
     gnomeExtensions.user-themes
+    
+    # Security and system tools
+    bitwarden
+    gpg
+    keepassxc
   ];
 
   # Enable and configure git
@@ -27,6 +32,27 @@
         name = "Sander Mirck";
         email = "sandermirck@gmail.com";
       };
+      # Security: Don't store credentials in plain text by default
+      credential.helper = "cache --timeout=300";  # 5 minutes
+    };
+  };
+
+  # Enable and configure GPG
+  programs.gpg = {
+    enable = true;
+    settings = {
+      # Security improvements
+      "personal-cipher-preferences" = "AES256,AES192,AES128";
+      "personal-compress-preferences" = "ZLIB,BZIP2,Z0";
+      "default-preference-list" = "SHA512 SHA384 SHA256 AES256 AES192 AES DSA3072 ECDH NIST P256 RSA3072";
+    };
+  };
+
+  # Enable password manager
+  programs.password-store = {
+    enable = true;
+    settings = {
+      PASSWORD_STORE_DIR = "$HOME/.password-store";
     };
   };
 
@@ -56,6 +82,16 @@
       dock-position = "BOTTOM";
       dash-max-icon-size = 48;
       intellihide = true;
+    };
+    
+    # Security: Lock screen after inactivity
+    "org/gnome/desktop/screensaver" = {
+      lock-enabled = true;
+      lock-delay = 30;  # Lock 30 seconds after screensaver starts
+    };
+    
+    "org/gnome/desktop/session" = {
+      idle-delay = 300;  # Activate screensaver after 5 minutes
     };
   };
 

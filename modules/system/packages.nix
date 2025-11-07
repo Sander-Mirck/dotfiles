@@ -37,6 +37,13 @@
       prismlauncher
       evil-helix
       qwen-code
+      # Security and system management packages
+      gnupg
+      haveged  # Improve system entropy
+      usbutils  # USB device info
+      pciutils  # PCI device info
+      smartmontools  # SMART monitoring for drives
+      hddtemp  # Hard drive temperature monitoring
     ]);
 
   # Enable Firefox (from unstable too)
@@ -57,5 +64,14 @@
     enable = true;
     binfmt = true;
   };
+  
+  # Security settings
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+  
+  # Enable haveged for better entropy
+  services.haveged.enable = true;
 }
 

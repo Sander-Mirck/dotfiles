@@ -15,4 +15,11 @@
 
   # Also, explicitly tell the X server to use the Intel driver.
   services.xserver.videoDrivers = [ "intel" ];
+  
+  # Security improvements
+  # Boot security
+  boot.tmp.cleanOnBoot = true;
+  # Enable systemd watchdog to detect and automatically reboot when the system hangs
+  boot.kernel.sysctl."kernel.watchdog_thresh" = 60;
+  services.systemd.enableEmergencyMode = true;
 }
