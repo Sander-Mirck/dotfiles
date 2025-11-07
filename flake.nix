@@ -17,7 +17,7 @@
       specialArgs = {
         inherit inputs;
       };
-      
+# test      
       modules = [
         # Import the host-specific configuration
         ./hosts/nixos

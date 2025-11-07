@@ -36,6 +36,7 @@
       netbird-ui
       prismlauncher
       evil-helix
+      qwen-code
     ]);
 
   # Enable Firefox (from unstable too)
