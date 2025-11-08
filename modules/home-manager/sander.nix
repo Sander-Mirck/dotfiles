@@ -23,7 +23,7 @@
     enable = true;
     settings = {
       user.name = "Sander Mirck";
-      user.email = "sandermirck@gmail.com";
+      user.email = "mail@sandermirck.nl.eu.org";
       credential.helper = "cache --timeout=300";
     };
   };
