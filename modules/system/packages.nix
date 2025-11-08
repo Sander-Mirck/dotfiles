@@ -1,71 +1,122 @@
 # Package management and system packages
 { config, pkgs, ... }:
 
-{
-  environment.systemPackages =
-    # All packages are from the unstable channel
-    (with pkgs; [
-      git
-      wget
-      curl
-      btop
-      unzip
-      ghostty
-      lazygit
-      neovim
-      ripgrep
-      fd
-      tree
-      vscodium
-      firefox
-      flatpak
-      ocs-url
-      gnome-tweaks
-      vesktop
-      kdePackages.kdenlive
-      bat
-      scrcpy
-      localsend
-      tailscale
-      tmux
-      godot_4
-      cloudflared
-      whatsapp-electron
-      nix-output-monitor
-      obsidian
-      lutris
-      netbird-ui
-      prismlauncher
-      evil-helix
-      qwen-code
-      # Security and system management packages
-      gnupg
-      haveged  # Improve system entropy
-      usbutils  # USB device info
-      pciutils  # PCI device info
-      smartmontools  # SMART monitoring for drives
-      hddtemp  # Hard drive temperature monitoring
-      emacs
-      python3
-      python3Packages.pip
-      python3Packages.setuptools
-      wl-clipboard
-    ]);
+let
+  # Categorized package groups for better organization
+  core-utils = with pkgs; [
+    git
+    wget
+    curl
+    unzip
+    tree
+    bat
+    fd
+    ripgrep
+    tmux
+    wl-clipboard
+  ];
 
-  # Enable Firefox (from unstable too)
-  programs.firefox.package = pkgs.firefox;
+  development = with pkgs; [
+    python3
+    python3Packages.pip
+    python3Packages.setuptools
+    godot_4
+    qwen-code
+  ];
+
+  editors-ide = with pkgs; [
+    neovim
+    evil-helix
+    emacs
+    vscodium
+    obsidian
+  ];
+
+  system-monitoring = with pkgs; [
+    btop
+    smartmontools
+    hddtemp
+    nix-output-monitor
+  ];
+
+  communication = with pkgs; [
+    vesktop
+    whatsapp-electron
+    tailscale
+    netbird-ui
+    cloudflared
+  ];
+
+  multimedia = with pkgs; [
+    kdePackages.kdenlive
+    scrcpy
+    localsend
+  ];
+
+  gaming = with pkgs; [
+    lutris
+    prismlauncher
+  ];
+
+  gnome-desktop = with pkgs; [
+    gnome-tweaks
+    flatpak
+    ocs-url
+  ];
+
+  security-system = with pkgs; [
+    gnupg
+    haveged
+    usbutils
+    pciutils
+  ];
+
+  terminals = with pkgs; [
+    ghostty
+    lazygit
+  ];
+
+  # Combine all package groups
+  all-packages = 
+    core-utils ++
+    development ++
+    editors-ide ++
+    system-monitoring ++
+    communication ++
+    multimedia ++
+    gaming ++
+    gnome-desktop ++
+    security-system ++
+    terminals ++
+    [ pkgs.firefox ];  # Firefox as standalone since it's also configured separately
+
+in {
+  environment.systemPackages = all-packages;
+
+  # Browser configuration
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox;
+  };
 
   # Shell aliases for Nix commands
   environment.shellAliases = {
+    # NixOS rebuild commands
     nrs = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
     nrsu = "sudo nixos-rebuild switch --upgrade --flake /etc/nixos#nixos";
     nrb = "sudo nixos-rebuild boot --flake /etc/nixos#nixos";
     nrt = "sudo nixos-rebuild test --flake /etc/nixos#nixos";
+    
+    # Nix garbage collection
     nrgc = "sudo nix-collect-garbage -d";
     nix-update = "sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade";
+    
+    # Utility aliases (optional additions)
+    ll = "ls -la";
+    update = "nix-update";
   };
 
-  # Appimage support
+  # AppImage support
   programs.appimage = {
     enable = true;
     binfmt = true;
@@ -77,7 +128,30 @@
     enableSSHSupport = true;
   };
   
-  # Enable haveged for better entropy
+  # System entropy improvement
   services.haveged.enable = true;
-}
 
+  # Additional program configurations (optional enhancements)
+  programs = {
+    # Better terminal experience
+    bash.interactiveShellInit = ''
+      # Enable better tab completion
+      bind 'set show-all-if-ambiguous on'
+      bind 'TAB:menu-complete'
+    '';
+
+    # Neovim as default editor if desired
+    neovim = {
+      defaultEditor = false;  # Set to true if you want nvim as default
+      viAlias = true;
+      vimAlias = true;
+    };
+  };
+
+  # Environment variables
+  environment.variables = {
+    EDITOR = "nvim";  # Or "gnome-text-editor" if you prefer
+    VISUAL = "nvim";
+    BROWSER = "firefox";
+  };
+}
