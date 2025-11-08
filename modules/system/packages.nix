@@ -46,6 +46,10 @@
       smartmontools  # SMART monitoring for drives
       hddtemp  # Hard drive temperature monitoring
       emacs
+      python3
+      python3Packages.pip
+      python3Packages.setuptools
+      wl-clipboard
     ]);
 
   # Enable Firefox (from unstable too)
