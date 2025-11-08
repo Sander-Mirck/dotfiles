@@ -20,5 +20,4 @@
   # Boot security
   boot.tmp.cleanOnBoot = true;
   # Enable systemd watchdog to detect and automatically reboot when the system hangs
-  boot.kernel.sysctl."kernel.watchdog_thresh" = 60;
 }
