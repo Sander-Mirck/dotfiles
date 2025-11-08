@@ -12,6 +12,7 @@
       unzip
       ghostty
       lazygit
+      neovim
       ripgrep
       fd
       tree

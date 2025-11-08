@@ -1,65 +1,49 @@
-# /etc/nixos/modules/home-manager/sander.nix
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  # Set your basic user information
   home.username = "sander";
   home.homeDirectory = "/home/sander";
-
-  # This is the state version for Home Manager. It's a good idea to set it.
   home.stateVersion = "25.05";
 
-  # Install user-specific packages, including your GNOME extensions
   home.packages = with pkgs; [
-    # Add your GNOME extensions here
+    # GNOME Extensions
     gnomeExtensions.blur-my-shell
     gnomeExtensions.caffeine
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.dash-to-dock
     gnomeExtensions.user-themes
-    
-    # Security and system tools
+
+    # Security and productivity
     bitwarden-desktop
     gnupg
     keepassxc
   ];
 
-  # Enable and configure git
   programs.git = {
     enable = true;
     settings = {
-      user = {
-        name = "Sander Mirck";
-        email = "sandermirck@gmail.com";
-      };
-      # Security: Don't store credentials in plain text by default
-      credential.helper = "cache --timeout=300";  # 5 minutes
+      user.name = "Sander Mirck";
+      user.email = "sandermirck@gmail.com";
+      credential.helper = "cache --timeout=300";
     };
   };
 
-  # Enable and configure GPG
   programs.gpg = {
     enable = true;
     settings = {
-      # Security improvements
       "personal-cipher-preferences" = "AES256,AES192,AES128";
       "personal-compress-preferences" = "ZLIB,BZIP2,Z0";
       "default-preference-list" = "SHA512 SHA384 SHA256 AES256 AES192 AES DSA3072 ECDH NIST P256 RSA3072";
     };
   };
 
-  # Enable password manager
   programs.password-store = {
     enable = true;
-    settings = {
-      PASSWORD_STORE_DIR = "$HOME/.password-store";
-    };
+    settings.PASSWORD_STORE_DIR = "$HOME/.password-store";
   };
 
-  # GNOME and dconf settings for declarative management
   dconf.settings = {
     "org/gnome/shell" = {
-      # This is the crucial part: list the extensions to enable by their UUID
       enabled-extensions = with pkgs.gnomeExtensions; [
         blur-my-shell.extensionUuid
         caffeine.extensionUuid
@@ -67,36 +51,59 @@
         dash-to-dock.extensionUuid
         user-themes.extensionUuid
       ];
-      # Also ensure user extensions are not globally disabled
       disable-user-extensions = false;
     };
 
-    # This setting is needed for the 'user-themes' extension to work
     "org/gnome/shell/extensions/user-themes" = {
-      name = "Yaru-dark"; # You can change "Yaru-dark" to your preferred theme name
+      name = "Yaru-dark";
     };
-    
-    # Optional: Example of configuring an extension directly (Dash to Dock)
-    # You can find these settings using the `dconf-editor` tool.
+
     "org/gnome/shell/extensions/dash-to-dock" = {
       dock-position = "BOTTOM";
       dash-max-icon-size = 48;
       intellihide = true;
     };
-    
-    # Security: Lock screen after inactivity
+
     "org/gnome/desktop/screensaver" = {
       lock-enabled = true;
-      lock-delay = 30;  # Lock 30 seconds after screensaver starts
+      lock-delay = 30;
     };
-    
+
     "org/gnome/desktop/session" = {
-      idle-delay = 300;  # Activate screensaver after 5 minutes
+      idle-delay = 300;
     };
   };
 
-  # Let Home Manager manage its own session variables
   home.sessionVariables = {
     EDITOR = "gnome-text-editor";
   };
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = lib.mkForce false;
+    viAlias = true;
+    vimAlias = true;
+    withNodeJs = true;
+    withPython3 = true;
+    extraPython3Packages = ps: with ps; [ pynvim ];
+
+    plugins = with pkgs.vimPlugins; [
+      dracula-vim
+    ];
+  };
+
+  xdg.configFile."nvim/init.lua".text = ''
+    -- Set Dracula as the default theme
+    vim.cmd('colorscheme dracula')
+
+    -- Neovim UI settings
+    vim.opt.number = true
+    vim.opt.relativenumber = true
+    vim.opt.cursorline = true
+    vim.opt.tabstop = 4
+    vim.opt.shiftwidth = 4
+    vim.opt.expandtab = true
+    vim.opt.autoindent = true
+    vim.opt.smartindent = true
+  '';
 }
