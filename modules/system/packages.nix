@@ -54,7 +54,7 @@ let
   ];
 
   gaming = with pkgs; [
-    lutris
+    # lutris
     prismlauncher
   ];
 
