@@ -1,3 +1,15 @@
+name: Nix Flake CI
+
+on:
+  push:
+    branches:
+      - unstable
+      - stable
+  pull_request:
+    branches:
+      - unstable
+      - stable
+
 jobs:
   check:
     name: Run nix flake checks
@@ -18,23 +30,23 @@ jobs:
       - name: Show Nix version
         shell: bash
         run: |
-          source /home/runner/.bashrc
+          source ~/.bashrc
           nix --version
 
       - name: Run nix flake check
         shell: bash
         run: |
-          source /home/runner/.bashrc
+          source ~/.bashrc
           nix flake check
 
       - name: Run nix fmt
         shell: bash
         run: |
-          source /home/runner/.bashrc
+          source ~/.bashrc
           nix fmt
 
       - name: Dry-activate system config
         shell: bash
         run: |
-          source /home/runner/.bashrc
+          source ~/.bashrc
           sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
