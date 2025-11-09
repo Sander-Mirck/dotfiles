@@ -32,8 +32,6 @@ jobs:
       - name: Run nix flake check
         run: nix flake check
 
-      - name: Run nix fmt
-        run: nix fmt .
-
-      - name: Dry-activate system config
-        run: sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
+      # Use nixfmt-tree instead of nixfmt to avoid deprecation warnings
+      - name: Run nix fmt (tree)
+        run: nix run .#formatter -- --check .
