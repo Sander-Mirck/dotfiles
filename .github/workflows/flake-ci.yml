@@ -19,34 +19,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install latest Nix
-        shell: bash
-        run: |
-          curl -L https://nixos.org/nix/install | sh
-          echo "source /home/runner/.nix-profile/etc/profile.d/nix.sh" >> ~/.bashrc
-          echo "export NIX_CONFIG='experimental-features = nix-command flakes'" >> ~/.bashrc
-          source ~/.bashrc
+      - name: Install Nix with flakes enabled
+        uses: cachix/install-nix-action@v22
+        with:
+          install_url: https://nixos.org/nix/install
+          extra_nix_config: |
+            experimental-features = nix-command flakes
 
       - name: Show Nix version
-        shell: bash
-        run: |
-          source ~/.bashrc
-          nix --version
+        run: nix --version
 
       - name: Run nix flake check
-        shell: bash
-        run: |
-          source ~/.bashrc
-          nix flake check
+        run: nix flake check
 
       - name: Run nix fmt
-        shell: bash
-        run: |
-          source ~/.bashrc
-          nix fmt
+        run: nix fmt
 
       - name: Dry-activate system config
-        shell: bash
-        run: |
-          source ~/.bashrc
-          sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
+        run: sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
