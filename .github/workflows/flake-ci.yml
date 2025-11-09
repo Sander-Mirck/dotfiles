@@ -33,7 +33,7 @@ jobs:
         run: nix flake check
 
       - name: Run nix fmt
-        run: nix fmt
+        run: nix fmt .
 
       - name: Dry-activate system config
         run: sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
