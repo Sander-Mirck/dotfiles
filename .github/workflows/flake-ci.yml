@@ -15,17 +15,25 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v22
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Install latest Nix
+        run: |
+          curl -L https://nixos.org/nix/install | sh
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
+
+      - name: Show Nix version
+        run: nix --version
 
       - name: Run nix flake check
-        run: nix flake check
+        run: |
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix flake check
 
       - name: Run nix fmt
-        run: nix fmt
+        run: |
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix fmt
 
       - name: Dry-activate system config
         run: |
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
           sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
