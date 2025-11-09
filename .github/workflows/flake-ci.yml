@@ -18,22 +18,24 @@ jobs:
       - name: Install latest Nix
         run: |
           curl -L https://nixos.org/nix/install | sh
-          . /home/runner/.nix-profile/etc/profile.d/nix.sh
+          echo ". /home/runner/.nix-profile/etc/profile.d/nix.sh" >> $GITHUB_ENV
 
       - name: Show Nix version
         run: nix --version
+        env:
+          NIX_PATH: nixpkgs=channel:nixos-unstable
 
       - name: Run nix flake check
-        run: |
-          . /home/runner/.nix-profile/etc/profile.d/nix.sh
-          nix flake check
+        run: nix flake check
+        env:
+          NIX_PATH: nixpkgs=channel:nixos-unstable
 
       - name: Run nix fmt
-        run: |
-          . /home/runner/.nix-profile/etc/profile.d/nix.sh
-          nix fmt
+        run: nix fmt
+        env:
+          NIX_PATH: nixpkgs=channel:nixos-unstable
 
       - name: Dry-activate system config
-        run: |
-          . /home/runner/.nix-profile/etc/profile.d/nix.sh
-          sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
+        run: sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
+        env:
+          NIX_PATH: nixpkgs=channel:nixos-unstable
