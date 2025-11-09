@@ -32,6 +32,5 @@ jobs:
       - name: Run nix flake check
         run: nix flake check
 
-      # Use nixfmt-tree instead of nixfmt to avoid deprecation warnings
-      - name: Run nix fmt (tree)
-        run: nix run .#formatter -- --check .
+      - name: Run nix fmt
+        run: nix fmt
