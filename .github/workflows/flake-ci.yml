@@ -1,11 +1,3 @@
-name: Nix Flake CI
-
-on:
-  push:
-    branches: [ unstable, stable ]
-  pull_request:
-    branches: [ unstable, stable ]
-
 jobs:
   check:
     name: Run nix flake checks
@@ -19,28 +11,30 @@ jobs:
         shell: bash
         run: |
           curl -L https://nixos.org/nix/install | sh
-          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          echo "source /home/runner/.nix-profile/etc/profile.d/nix.sh" >> ~/.bashrc
+          echo "export NIX_CONFIG='experimental-features = nix-command flakes'" >> ~/.bashrc
+          source ~/.bashrc
 
       - name: Show Nix version
         shell: bash
         run: |
-          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          source /home/runner/.bashrc
           nix --version
 
       - name: Run nix flake check
         shell: bash
         run: |
-          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          source /home/runner/.bashrc
           nix flake check
 
       - name: Run nix fmt
         shell: bash
         run: |
-          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          source /home/runner/.bashrc
           nix fmt
 
       - name: Dry-activate system config
         shell: bash
         run: |
-          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          source /home/runner/.bashrc
           sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
