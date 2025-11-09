@@ -1,0 +1,31 @@
+name: Nix Flake CI
+
+on:
+  push:
+    branches: [ unstable, stable ]
+  pull_request:
+    branches: [ unstable, stable ]
+
+jobs:
+  check:
+    name: Run nix flake checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v22
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Run nix flake check
+        run: nix flake check
+
+      - name: Run nix fmt
+        run: nix fmt
+
+      - name: Dry-activate system config
+        run: |
+          sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"

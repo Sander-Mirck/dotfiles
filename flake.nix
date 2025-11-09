@@ -13,16 +13,14 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      
+
       specialArgs = {
         inherit inputs;
       };
-      
+
       modules = [
-        # Import the host-specific configuration
         ./hosts/nixos
 
-        # Home Manager
         home-manager.nixosModules.home-manager
         {
           home-manager = {
@@ -32,18 +30,21 @@
           };
         }
 
-        # Apply the custom overlays to nixpkgs
         ({ config, pkgs, ... }: {
           nixpkgs.overlays = [ (import ./overlays) ];
         })
       ];
     };
-    
-    # Additional outputs for development
+
+    # Formatter for nix fmt
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+
+    # Dev shell
     devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
-      packages = [ 
-        nixpkgs.legacyPackages.x86_64-linux.git 
-        nixpkgs.legacyPackages.x86_64-linux.nil  # Nix language server
+      packages = [
+        nixpkgs.legacyPackages.x86_64-linux.git
+        nixpkgs.legacyPackages.x86_64-linux.nil
+        nixpkgs.legacyPackages.x86_64-linux.nixfmt
       ];
     };
   };

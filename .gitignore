@@ -1,58 +1,82 @@
-# Ignore Nix build results and garbage collection symlinks
+# Nix build artifacts
 /result*
 /gcroots/
+/nix/
+/nix-store/
+/nix-support/
 
-# Nix-specific files
+# Flake files (keep tracked ones)
 .nix*
 !flake.nix
 !flake.lock
 
-# A common pattern is to store secrets in a directory that is encrypted
-# by another tool (like sops-nix or agenix). We will ignore this
-# directory by default to prevent accidental commits.
+# Secrets and sensitive data
 /secrets/
 *.key
 *.gpg
 *.asc
-
-# Temporary files and logs
-*.tmp
-*.log
-*~
-
-# Cache directories
-.cache/
-.var/
-.tmp/
-
-# Configuration that might contain sensitive data
-.ssh/
-.gnupg/
-.config/htop/
-.config/nixpkgs/
-
-# IDE/editor-specific files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# System-specific files
-/etc/
-/run/
-/proc/
-/sys/
-
-# Build-related ignores
-dist/
-build/
-*.o
-*.so
-*.dylib
-
-# Secrets and credentials
+*.pem
+*.crt
+*.csr
+*.p12
+*.pfx
 *.env
 .envrc
 secrets.nix
 .password
 .credentials
+
+# Cache and temporary files
+.cache/
+.var/
+.tmp/
+*.tmp
+*.log
+*~
+*.bak
+*.swp
+*.swo
+
+# User-specific configuration
+.ssh/
+.gnupg/
+.config/htop/
+.config/nixpkgs/
+.direnv/
+.local/
+.python_history
+
+# IDE/editor files
+.vscode/
+.idea/
+*.code-workspace
+*.DS_Store
+*.iml
+
+# System directories (avoid accidental commits)
+etc/
+run/
+proc/
+sys/
+dev/
+boot/
+lost+found/
+
+# Build outputs
+dist/
+build/
+*.o
+*.so
+*.dylib
+*.a
+*.out
+
+# Git internals (redundant but safe)
+.git/
+.gitmodules
+*.patch
+
+# OS-specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
