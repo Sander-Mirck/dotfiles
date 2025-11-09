@@ -16,26 +16,31 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install latest Nix
+        shell: bash
         run: |
           curl -L https://nixos.org/nix/install | sh
-          echo ". /home/runner/.nix-profile/etc/profile.d/nix.sh" >> $GITHUB_ENV
+          source /home/runner/.nix-profile/etc/profile.d/nix.sh
 
       - name: Show Nix version
-        run: nix --version
-        env:
-          NIX_PATH: nixpkgs=channel:nixos-unstable
+        shell: bash
+        run: |
+          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix --version
 
       - name: Run nix flake check
-        run: nix flake check
-        env:
-          NIX_PATH: nixpkgs=channel:nixos-unstable
+        shell: bash
+        run: |
+          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix flake check
 
       - name: Run nix fmt
-        run: nix fmt
-        env:
-          NIX_PATH: nixpkgs=channel:nixos-unstable
+        shell: bash
+        run: |
+          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix fmt
 
       - name: Dry-activate system config
-        run: sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
-        env:
-          NIX_PATH: nixpkgs=channel:nixos-unstable
+        shell: bash
+        run: |
+          source /home/runner/.nix-profile/etc/profile.d/nix.sh
+          sudo nixos-rebuild dry-activate --flake .#nixos || echo "dry-activate failed (expected on non-NixOS)"
