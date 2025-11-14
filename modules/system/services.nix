@@ -29,9 +29,9 @@
     SystemMaxFileSize=10M
   '';
 
-  # Make portals behave nicely for Flatpak + GNOME
+  # Use GNOME's portal backend (better with Mutter/Wayland than gtk fallback)
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
   };
 }
