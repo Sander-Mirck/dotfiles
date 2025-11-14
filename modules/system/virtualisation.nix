@@ -7,8 +7,6 @@
   virtualisation.libvirtd.onBoot = "start";
   virtualisation.libvirtd.onShutdown = "shutdown";
 
-  users.users.sander.extraGroups = [ "libvirtd" ];
-
   environment.systemPackages = with pkgs; [
     virt-manager
     virt-viewer

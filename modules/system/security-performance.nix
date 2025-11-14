@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Security enhancements
+  # Security limits
   security.pam.loginLimits = [
     {
       domain = "@users";
@@ -12,11 +12,7 @@
     }
   ];
 
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
+  # Entropy – modern kernels are fine, but if you want it:
   services.haveged.enable = true;
 
   # Performance tweaks

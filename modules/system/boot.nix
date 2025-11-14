@@ -1,23 +1,29 @@
 # /etc/nixos/modules/system/boot.nix
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Bootloader configuration
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # --- KERNEL MODULES FIX FOR GDM GREY SCREEN ---
-  #
-  # Force the Intel graphics driver to load in the initrd. This ensures the
-  # GPU is fully initialized before the login manager starts, preventing the
-  # grey screen issue on fast logins.
-  boot.initrd.availableKernelModules = [ "i915" ];
+  # Early KMS for Intel to avoid GDM grey-screen and flicker
+  boot.initrd.kernelModules = [ "i915" ];
+  boot.initrd.availableKernelModules = lib.mkIf (config.boot.initrd.availableKernelModules != null) (
+    config.boot.initrd.availableKernelModules ++ [ "i915" ]
+  );
 
-  # Also, explicitly tell the X server to use the Intel driver.
-  services.xserver.videoDrivers = [ "intel" ];
-  
-  # Security improvements
-  # Boot security
+  # Prefer Wayland with GDM; keep X11 available but don’t force legacy "intel" DDX
+  services.xserver.videoDrivers = [ "modesetting" ];
+
+  # Ensure OpenGL/Mesa path and VAAPI are enabled for Intel
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [ intel-media-driver ];
+    extraPackages32 = with pkgs.pkgsi686Linux; [ intel-media-driver ];
+  };
+
+  # Boot hygiene
   boot.tmp.cleanOnBoot = true;
-  # Enable systemd watchdog to detect and automatically reboot when the system hangs
 }

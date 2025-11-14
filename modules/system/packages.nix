@@ -1,8 +1,8 @@
 # Package management and system packages
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
-  # Categorized package groups for better organization
+  # Categorized package groups
   core-utils = with pkgs; [
     git
     wget
@@ -21,12 +21,12 @@ let
     python3Packages.pip
     python3Packages.setuptools
     godot_4
-    qwen-code
+    # qwen-code  # If broken/not present on your nixpkgs rev, comment this out.
   ];
 
   editors-ide = with pkgs; [
     neovim
-    evil-helix
+    helix
     emacs
     vscodium
     obsidian
@@ -41,7 +41,7 @@ let
 
   communication = with pkgs; [
     vesktop
-    whatsapp-electron
+    # whatsapp-electron  # frequently broken; uncomment if you confirm it builds on your rev
     tailscale
     netbird-ui
     cloudflared
@@ -54,7 +54,6 @@ let
   ];
 
   gaming = with pkgs; [
-    # lutris
     prismlauncher
   ];
 
@@ -66,7 +65,6 @@ let
 
   security-system = with pkgs; [
     gnupg
-    haveged
     usbutils
     pciutils
   ];
@@ -76,8 +74,7 @@ let
     lazygit
   ];
 
-  # Combine all package groups
-  all-packages = 
+  all-packages =
     core-utils ++
     development ++
     editors-ide ++
@@ -88,32 +85,14 @@ let
     gnome-desktop ++
     security-system ++
     terminals ++
-    [ pkgs.firefox ];  # Firefox as standalone since it's also configured separately
-
-in {
+    [ pkgs.firefox ];
+in
+{
   environment.systemPackages = all-packages;
 
-  # Browser configuration
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
-  };
-
-  # Shell aliases for Nix commands
-  environment.shellAliases = {
-    # NixOS rebuild commands
-    nrs = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
-    nrsu = "sudo nixos-rebuild switch --upgrade --flake /etc/nixos#nixos";
-    nrb = "sudo nixos-rebuild boot --flake /etc/nixos#nixos";
-    nrt = "sudo nixos-rebuild test --flake /etc/nixos#nixos";
-    
-    # Nix garbage collection
-    nrgc = "sudo nix-collect-garbage -d";
-    nix-update = "sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade";
-    
-    # Utility aliases (optional additions)
-    ll = "ls -la";
-    update = "nix-update";
   };
 
   # AppImage support
@@ -121,28 +100,17 @@ in {
     enable = true;
     binfmt = true;
   };
-  
-  # Security settings
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-  
-  # System entropy improvement
-  services.haveged.enable = true;
 
-  # Additional program configurations (optional enhancements)
+  # Terminal experience
   programs = {
-    # Better terminal experience
     bash.interactiveShellInit = ''
-      # Enable better tab completion
+      # Better tab completion
       bind 'set show-all-if-ambiguous on'
       bind 'TAB:menu-complete'
     '';
 
-    # Neovim as default editor if desired
     neovim = {
-      defaultEditor = false;  # Set to true if you want nvim as default
+      defaultEditor = false;
       viAlias = true;
       vimAlias = true;
     };
@@ -150,7 +118,7 @@ in {
 
   # Environment variables
   environment.variables = {
-    EDITOR = "nvim";  # Or "gnome-text-editor" if you prefer
+    EDITOR = "nvim";
     VISUAL = "nvim";
     BROWSER = "firefox";
   };

@@ -1,9 +1,9 @@
 # /etc/nixos/hosts/nixos/services.nix
 # System services
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
-  # X11 + GNOME
+  # X11 + GNOME (GDM defaults to Wayland; Xorg as fallback)
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
@@ -12,23 +12,26 @@
   # Printing
   services.printing.enable = true;
 
-  # Enable Flatpak system-wide.
-  # This automatically handles making Flatpak apps visible in GNOME.
+  # Flatpak system-wide.
   services.flatpak.enable = true;
 
-  # Enable the Tailscale service
+  # Network mesh/VPNs
   services.tailscale.enable = true;
-
-  # Enable the Netbird service
   services.netbird.enable = true;
-  
-  # Security and system services
-  services.gnome.gnome-keyring.enable = true;  # Enable keyring for password management
-  services.udisks2.enable = true;  # Enable automatic mounting of removable media
-  
-  # Better logging
+
+  # Keyring & storage
+  services.gnome.gnome-keyring.enable = true;
+  services.udisks2.enable = true;
+
+  # Journald limits
   services.journald.extraConfig = ''
     SystemMaxUse=100M
     SystemMaxFileSize=10M
   '';
+
+  # Make portals behave nicely for Flatpak + GNOME
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 }

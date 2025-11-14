@@ -1,16 +1,15 @@
 # /etc/nixos/hosts/nixos/default.nix
 #
-# This is the main configuration file for the 'nixos' host.
-# It imports all the modules and sets host-specific options.
+# Main configuration file for the 'nixos' host.
 
 { config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
-    # Import the hardware configuration for this specific machine.
+    # Hardware configuration for this machine.
     ./hardware-configuration.nix
 
-    # Import system-wide modules.
+    # System-wide modules.
     ../../modules/system/boot.nix
     ../../modules/system/networking.nix
     ../../modules/system/locale.nix
@@ -18,19 +17,18 @@
     ../../modules/system/packages.nix
     ../../modules/system/services.nix
     ../../modules/system/sudo.nix
-    ../../modules/system/user-sander.nix # System-level user definition
+    ../../modules/system/user-sander.nix
     ../../modules/system/virtualisation.nix
     ../../modules/system/security-performance.nix
     ../../modules/system/shell-aliases.nix
-    # Import Home Manager modules.
-    inputs.home-manager.nixosModules.home-manager
+
+    # Do NOT import Home Manager here; it is imported at the flake top-level.
   ];
 
   # Nix settings
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # System state version
+  # Keep this pinned to the release you installed against.
   system.stateVersion = "25.05";
-
 }

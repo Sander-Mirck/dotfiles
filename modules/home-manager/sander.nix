@@ -33,7 +33,8 @@
     settings = {
       "personal-cipher-preferences" = "AES256,AES192,AES128";
       "personal-compress-preferences" = "ZLIB,BZIP2,Z0";
-      "default-preference-list" = "SHA512 SHA384 SHA256 AES256 AES192 AES DSA3072 ECDH NIST P256 RSA3072";
+      "default-preference-list" =
+        "SHA512 SHA384 SHA256 AES256 AES192 AES DSA3072 ECDH NIST P256 RSA3072";
     };
   };
 

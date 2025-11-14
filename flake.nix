@@ -40,12 +40,13 @@
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
 
     # Dev shell
-    devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
-      packages = [
-        nixpkgs.legacyPackages.x86_64-linux.git
-        nixpkgs.legacyPackages.x86_64-linux.nil
-        nixpkgs.legacyPackages.x86_64-linux.nixfmt
-      ];
-    };
+    devShells.x86_64-linux.default =
+      nixpkgs.legacyPackages.x86_64-linux.mkShell {
+        packages = [
+          nixpkgs.legacyPackages.x86_64-linux.git
+          nixpkgs.legacyPackages.x86_64-linux.nil
+          nixpkgs.legacyPackages.x86_64-linux.nixfmt
+        ];
+      };
   };
 }
