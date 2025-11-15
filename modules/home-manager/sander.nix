@@ -5,7 +5,8 @@
   lib,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     # User-specific program configurations
     ./programs/git.nix
@@ -16,8 +17,7 @@
     ./services/gpg-agent.nix
     ./services/ssh-agent.nix
 
-    # Theming and appearance
-    ./themes/gtk.nix
+    # The old ./themes/gtk.nix import is now gone
   ];
 
   # Basic user and home directory settings
@@ -26,24 +26,33 @@
 
   # Enable home-manager
   programs.home-manager.enable = true;
-
-  # Set the state version for home-manager
   home.stateVersion = "25.05";
+
+  # Add this entire block to control GTK themes via KDE's database
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-theme = "Adwaita-dark";
+      icon-theme = "Papirus";
+    };
+  };
 
   # Install packages directly into the user's profile
   home.packages = with pkgs; [
+    # Packages for GTK theming (needed by KDE)
+    gnome-themes-extra # provides Adwaita-dark
+    papirus-icon-theme # provides Papirus
+
     # For Git credential helper
     libsecret
 
     # Python environment
     (python3.withPackages (
-      ps:
-        with ps; [
-          pip
-          setuptools
-          pynvim
-          virtualenv
-        ]
+      ps: with ps; [
+        pip
+        setuptools
+        pynvim
+        virtualenv
+      ]
     ))
 
     # Development tools
