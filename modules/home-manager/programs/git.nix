@@ -9,19 +9,18 @@
   programs.git = {
     enable = true;
 
-    # The 'package' line that caused the error has been removed.
-    # The default git package is now used.
+    # No 'package' override is needed here.
 
+    # All settings are now combined in this single block.
     settings = {
       user.name = "Sander Mirck";
       user.email = "mail@sandermirck.nl.eu.org";
       core.editor = "nvim";
       pull.rebase = true;
-    };
-
-    # This section correctly configures Git to use the libsecret helper.
-    extraConfig = {
+      # The line from extraConfig has been moved here.
       credential.helper = "libsecret";
     };
+
+    # The old 'extraConfig' block has been removed.
   };
 }
