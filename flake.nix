@@ -10,10 +10,7 @@
     };
   };
 
-  outputs = {
-    self,
-    ...
-  } @ inputs: let
+  outputs = {self, ...} @ inputs: let
     # Import the library helper function.
     lib = import ./lib {inherit inputs;};
   in {
