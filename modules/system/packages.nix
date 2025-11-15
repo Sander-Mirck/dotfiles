@@ -6,7 +6,6 @@
   ...
 }: let
   # ─── Package Groups ────────────────────────────────────────────────
-
   core-utils = with pkgs; [
     bat
     curl
