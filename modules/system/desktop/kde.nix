@@ -4,7 +4,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   # Enable the X server
   services.xserver.enable = true;
 
@@ -23,6 +24,10 @@
 
   # Enable the KDE Plasma 6 desktop environment
   services.desktopManager.plasma6.enable = true;
+
+  # Enable the KDE Wallet to securely store secrets like Git credentials.
+  # This will automatically unlock the wallet when you log in.
+  security.pam.services.sddm.enableKwallet = true;
 
   # Install some common KDE apps system-wide
   environment.systemPackages = with pkgs; [
