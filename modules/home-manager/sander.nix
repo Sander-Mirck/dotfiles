@@ -5,8 +5,7 @@
   lib,
   inputs,
   ...
-}:
-{
+}: {
   imports = [
     # User-specific program configurations
     ./programs/git.nix
@@ -48,12 +47,13 @@
 
     # Python environment
     (python3.withPackages (
-      ps: with ps; [
-        pip
-        setuptools
-        pynvim
-        virtualenv
-      ]
+      ps:
+        with ps; [
+          pip
+          setuptools
+          pynvim
+          virtualenv
+        ]
     ))
 
     # Development tools

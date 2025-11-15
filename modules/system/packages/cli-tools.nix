@@ -1,6 +1,5 @@
 # modules/system/packages/cli-tools.nix
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     bat
     curl

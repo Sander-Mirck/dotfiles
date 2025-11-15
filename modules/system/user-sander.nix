@@ -4,8 +4,7 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   users.users.sander = {
     isNormalUser = true;
     description = "Sander Mirck";
