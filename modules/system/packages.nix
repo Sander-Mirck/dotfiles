@@ -9,6 +9,11 @@
   core-utils = with pkgs; [
     bat
     curl
+<<<<<<< HEAD
+    eza  # Modern ls replacement
+=======
+    eza # Modern ls replacement
+>>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
     fd
     git
     ripgrep
@@ -17,6 +22,9 @@
     unzip
     wget
     wl-clipboard
+    fzf
+    jq
+    yq
   ];
 
   development = with pkgs; [
@@ -24,6 +32,8 @@
     python3
     python3Packages.pip
     python3Packages.setuptools
+    nodejs
+    lua
     # qwen-code  # If broken/not present on your nixpkgs rev, comment this out.
   ];
 
@@ -33,6 +43,9 @@
     neovim
     obsidian
     vscodium
+    # Add Nix LSP support
+    nil
+    nixd
   ];
 
   communication = with pkgs; [
@@ -43,9 +56,8 @@
     # whatsapp-electron  # frequently broken; uncomment if you confirm it builds on your rev
   ];
 
-  gnome-desktop = with pkgs; [
+  kde-desktop = with pkgs; [
     flatpak
-    gnome-tweaks
     ocs-url
   ];
 
@@ -70,6 +82,7 @@
     hddtemp
     nix-output-monitor
     smartmontools
+    htop
   ];
 
   terminals = with pkgs; [
@@ -77,18 +90,31 @@
     lazygit
   ];
 
+  # Optional packages that might be broken - conditionally include
+<<<<<<< HEAD
+  optional-packages = with pkgs; lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
+    # Add any optional packages here
+  ];
+=======
+  optional-packages = with pkgs;
+    lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
+      # Add any optional packages here
+    ];
+>>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
+
   # ─── Aggregate All Packages ────────────────────────────────────────
   all-packages =
     core-utils
     ++ development
     ++ editors-ide
     ++ communication
-    ++ gnome-desktop
+    ++ kde-desktop
     ++ gaming
     ++ multimedia
     ++ security-system
     ++ system-monitoring
     ++ terminals
+    ++ optional-packages
     ++ [pkgs.firefox];
 in {
   # ─── System Packages ───────────────────────────────────────────────
@@ -105,18 +131,39 @@ in {
     binfmt = true;
   };
 
-  programs = {
-    bash.interactiveShellInit = ''
+  # Enhanced bash configuration
+  programs.bash = {
+    interactiveShellInit = ''
       # Better tab completion
       bind 'set show-all-if-ambiguous on'
       bind 'TAB:menu-complete'
+<<<<<<< HEAD
+      
+      # Improved ls colors
+      export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
     '';
+  };
 
-    neovim = {
-      defaultEditor = false;
-      viAlias = true;
-      vimAlias = true;
-    };
+=======
+
+      # Improved ls colors
+      export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+    '';
+  };
+
+>>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
+  programs.neovim = {
+    defaultEditor = false;
+    viAlias = true;
+    vimAlias = true;
+  };
+
+  # Enable useful system utilities
+  programs = {
+    mtr.enable = true;
+    nmap.enable = true;
+    wireshark.enable = true;
+    command-not-found.enable = true;
   };
 
   # ─── Environment Variables ─────────────────────────────────────────
@@ -124,5 +171,55 @@ in {
     EDITOR = "nvim";
     VISUAL = "nvim";
     BROWSER = "firefox";
+    TERMINAL = "konsole";
+    PAGER = "bat";
+    MANPAGER = "bat";
+<<<<<<< HEAD
+=======
+  };
+
+  # ─── Nix Configuration ─────────────────────────────────────────────
+  nix = {
+    settings = {
+      # Enable flakes and nix-command
+      experimental-features = ["nix-command" "flakes"];
+
+      # Auto optimize store
+      auto-optimise-store = true;
+
+      # Build cores
+      cores = 0; # Use all available cores
+      max-jobs = "auto";
+    };
+
+    # Enable garbage collection
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+>>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
+  };
+
+  # ─── Nix Configuration ─────────────────────────────────────────────
+  nix = {
+    settings = {
+      # Enable flakes and nix-command
+      experimental-features = ["nix-command" "flakes"];
+      
+      # Auto optimize store
+      auto-optimise-store = true;
+      
+      # Build cores
+      cores = 0; # Use all available cores
+      max-jobs = "auto";
+    };
+    
+    # Enable garbage collection
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
   };
 }
