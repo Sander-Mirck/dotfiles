@@ -17,5 +17,10 @@
     ../modules/system/services.nix
     ../modules/system/shell-aliases.nix
     ../modules/system/desktop/kde.nix
+
+    # Import package sets
+    ../modules/system/packages/cli-tools.nix
+    ../modules/system/packages/development.nix
+    ../modules/system/packages/desktop-apps.nix
   ];
 }

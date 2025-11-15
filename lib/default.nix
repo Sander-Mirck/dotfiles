@@ -4,6 +4,7 @@
   mkNixosSystem = {
     system ? "x86_64-linux",
     modules,
+    username, # The primary username for this system
   }:
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
@@ -23,15 +24,11 @@
           # Pass flake inputs to home-manager modules.
           home-manager.extraSpecialArgs = {inherit inputs;};
           # Import the user's home-manager configuration.
-          home-manager.users.sander = import ../modules/home-manager/sander.nix;
+          home-manager.users.${username} = import ../modules/home-manager/${username}.nix;
         }
 
         # Apply custom overlays.
-        ({
-          config,
-          pkgs,
-          ...
-        }: {
+        ({config, pkgs, ...}: {
           nixpkgs.overlays = [
             (import ../overlays)
           ];

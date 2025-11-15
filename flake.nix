@@ -10,47 +10,60 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # statix input has been removed.
-
-    # deadnix is kept as an input for fast, reliable CI checks.
     deadnix = {
       url = "github:astro/deadnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {self, ...} @ inputs: let
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    flake-utils,
+    ...
+  } @ inputs: let
+    # Define lib at the top level so it's accessible everywhere
     lib = import ./lib {inherit inputs;};
-  in {
-    # -- NIXOS CONFIGURATIONS --
-    nixosConfigurations = {
-      laptop = lib.mkNixosSystem {
-        system = "x86_64-linux";
-        modules = ./hosts/laptop;
+  in
+    flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      # -- FORMATTER --
+      formatter = pkgs.alejandra;
+
+      # -- LINTER --
+      packages.deadnix = inputs.deadnix.packages.${system}.default;
+
+      # -- DEV SHELL --
+      devShells.default = pkgs.mkShell {
+        packages = [
+          pkgs.git
+          pkgs.nil
+          pkgs.alejandra
+          self.packages.${system}.deadnix
+        ];
+      };
+    })
+    // {
+      # -- NIXOS CONFIGURATIONS --
+      nixosConfigurations = {
+        laptop = lib.mkNixosSystem {
+          system = "x86_64-linux";
+          modules = ./hosts/laptop;
+          username = "sander";
+        };
       };
 
-      server = lib.mkNixosSystem {
-        system = "x86_64-linux";
-        modules = ./hosts/server;
+      # -- HOME MANAGER CONFIGURATIONS --
+      homeConfigurations = {
+        sander = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = {inherit inputs;};
+          modules = [./modules/home-manager/sander.nix];
+        };
       };
     };
-
-    # -- FORMATTER --
-    formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
-
-    # -- LINTERS (for CI) --
-    # statix package has been removed.
-    packages.x86_64-linux.deadnix = inputs.deadnix.packages.x86_64-linux.default;
-
-    # -- DEV SHELL --
-    devShells.x86_64-linux.default = inputs.nixpkgs.legacyPackages.x86_64-linux.mkShell {
-      packages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
-        git
-        nil
-        alejandra
-        # statix package has been removed from the dev shell.
-        inputs.deadnix.packages.x86_64-linux.default
-      ];
-    };
-  };
 }
