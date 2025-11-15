@@ -6,7 +6,7 @@
 }:
 let
   # Set this to false for security in production
-  enableUnsafeNoPassword = lib.mkDefault true;
+  enableUnsafeNoPassword = true; # Just use a plain boolean here
 in
 {
   security.sudo.extraRules = lib.mkIf enableUnsafeNoPassword [
