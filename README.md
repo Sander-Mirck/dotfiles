@@ -1,4 +1,4 @@
-# NixOS Configuration (Professional Setup)
+# NixOS Configuration
 
 This repository contains my modular NixOS configuration using flakes, profiles, overlays, and secrets.
 
