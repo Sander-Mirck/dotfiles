@@ -7,7 +7,7 @@
     enable = true;
     theme = {
       name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra; # ✅ fixed
+      package = pkgs.gnome-themes-extra; 
     };
     iconTheme = {
       name = "Papirus";
