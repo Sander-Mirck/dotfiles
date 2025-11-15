@@ -17,7 +17,26 @@
     ./services/ssh-agent.nix
 
     # Theming and appearance.
-    ./themes/gtk.nix
+    ./themes/gtk.nixhome.packages = with pkgs; [
+      libsecret # Add this line
+      (python3.withPackages (ps:
+        with ps; [
+          pip
+          setuptools
+          pynvim
+          virtualenv
+        ]))
+      lua-language-server
+      eza
+      fzf
+      bat
+      ripgrep
+      fd
+      jq
+      yq
+      htop
+      btop
+    ];
   ];
 
   # Basic user and home directory settings.
@@ -32,6 +51,7 @@
 
   # Install packages directly into the user's profile.
   home.packages = with pkgs; [
+    libsecret
     (python3.withPackages (ps:
       with ps; [
         pip

@@ -9,8 +9,8 @@
   programs.git = {
     enable = true;
 
-    # Use a version of Git that includes the libsecret helper.
-    package = pkgs.git.withPackages (ps: [ ps.libsecret ]);
+    # The 'package' line that caused the error has been removed.
+    # The default git package is now used.
 
     settings = {
       user.name = "Sander Mirck";
@@ -19,9 +19,7 @@
       pull.rebase = true;
     };
 
-    # This is the corrected section.
-    # We use `extraConfig` to set the credential helper, which integrates
-    # with desktop keyrings like KDE Wallet.
+    # This section correctly configures Git to use the libsecret helper.
     extraConfig = {
       credential.helper = "libsecret";
     };
