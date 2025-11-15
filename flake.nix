@@ -1,6 +1,6 @@
 # flake.nix
 {
-  description = "Sander's Professional NixOS Configuration";
+  description = "Sander's NixOS Configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
