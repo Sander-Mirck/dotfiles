@@ -20,12 +20,8 @@
   };
 
   # Enable the KDE Plasma 6 desktop environment
-  services.desktopManager.plasma6 = {
-    enable = true;
-
-    # Add this line to disable KDE's automatic GTK configuration
-    kde-gtk-config = false;
-  };
+  # Ensure the incorrect line is removed from this block
+  services.desktopManager.plasma6.enable = true;
 
   # Enable the KDE Wallet to securely store secrets like Git credentials.
   security.pam.services.sddm.enableKwallet = true;
