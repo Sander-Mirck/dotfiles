@@ -19,10 +19,11 @@
       pull.rebase = true;
     };
 
-    # Configure Git to use the libsecret credential helper, which integrates
+    # This is the corrected section.
+    # We use `extraConfig` to set the credential helper, which integrates
     # with desktop keyrings like KDE Wallet.
-    credential = {
-      helper = "libsecret";
+    extraConfig = {
+      credential.helper = "libsecret";
     };
   };
 }
