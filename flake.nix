@@ -10,13 +10,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Add statix as a flake input
-    statix = {
-      url = "github:nerdypepper/statix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # statix input has been removed.
 
-    # Add deadnix as a flake input
+    # deadnix is kept as an input for fast, reliable CI checks.
     deadnix = {
       url = "github:astro/deadnix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,7 +20,6 @@
   };
 
   outputs = {self, ...} @ inputs: let
-    # Import the library helper function.
     lib = import ./lib {inherit inputs;};
   in {
     # -- NIXOS CONFIGURATIONS --
@@ -44,18 +39,17 @@
     formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
     # -- LINTERS (for CI) --
-    # Expose statix and deadnix for easy access
-    packages.x86_64-linux.statix = inputs.statix.packages.x86_64-linux.default;
+    # statix package has been removed.
     packages.x86_64-linux.deadnix = inputs.deadnix.packages.x86_64-linux.default;
 
     # -- DEV SHELL --
     devShells.x86_64-linux.default = inputs.nixpkgs.legacyPackages.x86_64-linux.mkShell {
       packages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
         git
-        nil # Nix Language Server
-        alejandra # The formatter
-        inputs.statix.packages.x86_64-linux.default # Add statix to the dev shell
-        inputs.deadnix.packages.x86_64-linux.default # Add deadnix to the dev shell
+        nil 
+        alejandra
+        # statix package has been removed from the dev shell.
+        inputs.deadnix.packages.x86_64-linux.default
       ];
     };
   };

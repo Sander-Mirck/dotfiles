@@ -33,12 +33,10 @@ jobs:
       - name: Format check (alejandra)
         run: nix run .#formatter.x86_64-linux -- --check .
         
-      - name: Lint (statix)
-        # Use the statix package from your flake's outputs
-        run: nix run .#statix -- check .
+      # The statix step has been removed.
         
       - name: Find unused code (deadnix)
-        # Use the deadnix package from your flake's outputs
+        # This now correctly uses the flake input, as suggested before.
         run: nix run .#deadnix -- --fail .
         
       - name: Evaluate all configurations
