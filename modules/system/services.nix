@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   # Printing
   services.printing.enable = true;
 
@@ -11,7 +12,6 @@
 
   # Network mesh/VPNs
   services.tailscale.enable = true;
-  services.netbird.enable = true;
 
   # Keyring & storage
   services.udisks2.enable = true;
