@@ -9,11 +9,7 @@
   core-utils = with pkgs; [
     bat
     curl
-<<<<<<< HEAD
     eza  # Modern ls replacement
-=======
-    eza # Modern ls replacement
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
     fd
     git
     ripgrep
@@ -91,16 +87,9 @@
   ];
 
   # Optional packages that might be broken - conditionally include
-<<<<<<< HEAD
   optional-packages = with pkgs; lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
     # Add any optional packages here
   ];
-=======
-  optional-packages = with pkgs;
-    lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
-      # Add any optional packages here
-    ];
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
 
   # ─── Aggregate All Packages ────────────────────────────────────────
   all-packages =
@@ -137,21 +126,12 @@ in {
       # Better tab completion
       bind 'set show-all-if-ambiguous on'
       bind 'TAB:menu-complete'
-<<<<<<< HEAD
       
       # Improved ls colors
       export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
     '';
   };
 
-=======
-
-      # Improved ls colors
-      export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
-    '';
-  };
-
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
   programs.neovim = {
     defaultEditor = false;
     viAlias = true;
@@ -174,31 +154,6 @@ in {
     TERMINAL = "konsole";
     PAGER = "bat";
     MANPAGER = "bat";
-<<<<<<< HEAD
-=======
-  };
-
-  # ─── Nix Configuration ─────────────────────────────────────────────
-  nix = {
-    settings = {
-      # Enable flakes and nix-command
-      experimental-features = ["nix-command" "flakes"];
-
-      # Auto optimize store
-      auto-optimise-store = true;
-
-      # Build cores
-      cores = 0; # Use all available cores
-      max-jobs = "auto";
-    };
-
-    # Enable garbage collection
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
   };
 
   # ─── Nix Configuration ─────────────────────────────────────────────

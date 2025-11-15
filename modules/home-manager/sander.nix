@@ -17,11 +17,7 @@
     
     # Themes
     ./themes/gtk.nix
-<<<<<<< HEAD
     
-=======
-
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
     # Desktop integration
     ./desktop/kde.nix
   ];
@@ -40,7 +36,6 @@
   home.packages = with pkgs; [
     # Development tools
     nodejs
-<<<<<<< HEAD
     (python3.withPackages (ps: with ps; [
       pip
       setuptools
@@ -54,22 +49,6 @@
 
     # Utilities
     eza  # Modern ls replacement
-=======
-    (python3.withPackages (ps:
-      with ps; [
-        pip
-        setuptools
-        pynvim
-        virtualenv
-      ]))
-    lua
-    lua-language-server
-    nil # Nix LSP
-    nixd # Nix LSP server
-
-    # Utilities
-    eza # Modern ls replacement
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
     fzf
     bat
     ripgrep
@@ -105,8 +84,4 @@
       pinentryFlavor = "qt"; # Use Qt pinentry for KDE
     };
   };
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
