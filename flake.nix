@@ -12,37 +12,36 @@
     agenix.url = "github:ryantm/agenix"; # for secrets management
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    agenix,
-    ...
-  } @ inputs: {
+  outputs = { self, nixpkgs, home-manager, agenix, ... } @ inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
+        specialArgs = { inherit inputs; };
         modules = [
           ./hosts/laptop
           ./profiles/workstation.nix
+
+          # Enable Home Manager as a NixOS module
           home-manager.nixosModules.home-manager
+
+          # User configuration
           {
             home-manager.users.sander = import ./modules/home-manager/sander.nix;
+
+            # Global Home Manager options
+            home-manager.backupFileExtension = "backup";
           }
-          ({
-            config,
-            pkgs,
-            ...
-          }: {
-            nixpkgs.overlays = [(import ./overlays)];
+
+          # Overlays
+          ({ config, pkgs, ... }: {
+            nixpkgs.overlays = [ (import ./overlays) ];
           })
         ];
       };
 
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
+        specialArgs = { inherit inputs; };
         modules = [
           ./hosts/server
           ./profiles/server.nix
@@ -51,8 +50,10 @@
       };
     };
 
+    # Formatter
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
+    # Dev shell
     devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
       packages = with nixpkgs.legacyPackages.x86_64-linux; [
         git
