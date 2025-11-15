@@ -15,4 +15,3 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 }
-# test
