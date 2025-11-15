@@ -4,18 +4,24 @@
   pkgs,
   lib,
   ...
-}: {
-  # Defines the primary user account for the system.
+}:
+{
   users.users.sander = {
     isNormalUser = true;
     description = "Sander Mirck";
-    extraGroups = ["networkmanager" "wheel" "docker" "libvirtd"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "libvirtd"
+    ];
 
-    # Set an initial password. For better security, replace this with `hashedPassword`.
-    initialPassword = "temp";
+    # 🔒 SECURE: Use hashed password
+    hashedPassword = "$6$VUiEylEBRqJYd/7.$m6sXKpXOyEOYa4guwyO4BLNIqKYhNqb.9UR14zLaIyC4zv1x/86nQputX7RZ8.aRs.7QYwlFKZ7xmSgNlp1FO/";
 
     openssh.authorizedKeys.keys = [
-      # Add public SSH keys here for remote access.
+      # Add your SSH keys here
+      # "ssh-ed25519 AAAAC3Nza... your-comment"
     ];
   };
 }
