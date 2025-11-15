@@ -4,14 +4,14 @@
 {
   environment.shellAliases = {
     # laptop rebuild commands
-    nrs = "sudo laptop-rebuild switch --flake /etc/laptop#laptop";
-    nrsu = "sudo laptop-rebuild switch --upgrade --flake /etc/laptop#laptop";
-    nrb = "sudo laptop-rebuild boot --flake /etc/laptop#laptop";
-    nrt = "sudo laptop-rebuild test --flake /etc/laptop#laptop";
+    nrs = "sudo nixos-rebuild switch --flake /etc/nixos#laptop";
+    nrsu = "sudo nixos-rebuild switch --upgrade --flake /etc/nixos#laptop";
+    nrb = "sudo nixos-rebuild boot --flake /etc/nixos#laptop";
+    nrt = "sudo nixos-rebuild test --flake /etc/nixos#laptop";
 
     # Nix garbage collection
     nrgc = "sudo nix-collect-garbage -d";
-    nix-update = "sudo laptop-rebuild switch --flake /etc/laptop#laptop --upgrade";
+    nix-update = "sudo nixos-rebuild switch --flake /etc/nixos#laptop --upgrade";
 
     # Utility aliases
     ll = "ls -la";
