@@ -8,56 +8,37 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    agenix.url = "github:ryantm/agenix"; # for secrets management
   };
 
   outputs = {
     self,
-    nixpkgs,
-    home-manager,
-    agenix,
     ...
-  } @ inputs: {
+  } @ inputs: let
+    # Import the library helper function.
+    lib = import ./lib {inherit inputs;};
+  in {
+    # -- NIXOS CONFIGURATIONS --
     nixosConfigurations = {
-      laptop = nixpkgs.lib.nixosSystem {
+      laptop = lib.mkNixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
-        modules = [
-          ./hosts/laptop
-          ./profiles/workstation.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.users.sander = import ./modules/home-manager/sander.nix;
-          }
-          ({
-            config,
-            pkgs,
-            ...
-          }: {
-            nixpkgs.overlays = [(import ./overlays)];
-          })
-        ];
+        modules = ./hosts/laptop;
       };
 
-      server = nixpkgs.lib.nixosSystem {
+      server = lib.mkNixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
-        modules = [
-          ./hosts/server
-          ./profiles/server.nix
-          home-manager.nixosModules.home-manager
-        ];
+        modules = ./hosts/server;
       };
     };
 
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+    # -- FORMATTER --
+    formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
-    devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
-      packages = with nixpkgs.legacyPackages.x86_64-linux; [
+    # -- DEV SHELL --
+    devShells.x86_64-linux.default = inputs.nixpkgs.legacyPackages.x86_64-linux.mkShell {
+      packages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
         git
-        nil
-        nixfmt
+        nil # Nix Language Server
+        alejandra # The formatter
       ];
     };
   };

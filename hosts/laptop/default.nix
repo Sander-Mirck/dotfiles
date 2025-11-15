@@ -1,3 +1,4 @@
+# hosts/laptop/default.nix
 {
   config,
   pkgs,
@@ -6,27 +7,14 @@
   ...
 }: {
   imports = [
+    # Import hardware-specific configuration.
     ./hardware-configuration.nix
 
-    # System-wide modules
-    ../../modules/system/boot.nix
-    ../../modules/system/networking.nix
-    ../../modules/system/locale.nix
-    ../../modules/system/audio.nix
-    ../../modules/system/packages.nix
-    ../../modules/system/services.nix
-    ../../modules/system/sudo.nix
-    ../../modules/system/user-sander.nix
-    ../../modules/system/virtualisation.nix
-    ../../modules/system/security-performance.nix
-    ../../modules/system/shell-aliases.nix
-
-    # Desktop environment
-    ../../modules/system/desktop/kde.nix
+    # Import the roles that define this machine.
+    ../../roles/desktop.nix
+    ../../roles/dev.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
-  system.stateVersion = "25.05";
+  # Host-specific settings can go here.
+  networking.hostName = "laptop";
 }

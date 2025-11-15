@@ -24,7 +24,6 @@
     python3Packages.pip
     python3Packages.setuptools
     godot_4
-    # qwen-code  # If broken/not present on your nixpkgs rev, comment this out.
   ];
 
   editors-ide = with pkgs; [
@@ -44,7 +43,6 @@
 
   communication = with pkgs; [
     vesktop
-    # whatsapp-electron  # frequently broken; uncomment if you confirm it builds on your rev
     tailscale
     netbird-ui
     cloudflared
@@ -56,15 +54,7 @@
     localsend
   ];
 
-  gaming = with pkgs; [
-    prismlauncher
-  ];
-
-  gnome-desktop = with pkgs; [
-    gnome-tweaks
-    flatpak
-    ocs-url
-  ];
+  gaming = with pkgs; [prismlauncher];
 
   security-system = with pkgs; [
     gnupg
@@ -85,17 +75,13 @@
     ++ communication
     ++ multimedia
     ++ gaming
-    ++ gnome-desktop
     ++ security-system
     ++ terminals
     ++ [pkgs.firefox];
 in {
   environment.systemPackages = all-packages;
 
-  programs.firefox = {
-    enable = true;
-    package = pkgs.firefox;
-  };
+  programs.firefox.enable = true;
 
   # AppImage support
   programs.appimage = {
@@ -104,18 +90,10 @@ in {
   };
 
   # Terminal experience
-  programs = {
-    bash.interactiveShellInit = ''
-      # Better tab completion
-      bind 'set show-all-if-ambiguous on'
-      bind 'TAB:menu-complete'
-    '';
-
-    neovim = {
-      defaultEditor = false;
-      viAlias = true;
-      vimAlias = true;
-    };
+  programs.neovim = {
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
   };
 
   # Environment variables
