@@ -12,11 +12,17 @@
     agenix.url = "github:ryantm/agenix"; # for secrets management
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, ... } @ inputs: {
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    agenix,
+    ...
+  } @ inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
+        specialArgs = {inherit inputs;};
         modules = [
           ./hosts/laptop
           ./profiles/workstation.nix
@@ -35,20 +41,24 @@
           }
 
           # Overlays
-          ({ config, pkgs, ... }: {
-            nixpkgs.overlays = [ (import ./overlays) ];
+          ({
+            config,
+            pkgs,
+            ...
+          }: {
+            nixpkgs.overlays = [(import ./overlays)];
           })
         ];
       };
 
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
+        specialArgs = {inherit inputs;};
         modules = [
           ./hosts/server
           ./profiles/server.nix
           home-manager.nixosModules.home-manager
-          
+
           # Add basic Home Manager config for server if needed
           {
             home-manager.useGlobalPkgs = true;
