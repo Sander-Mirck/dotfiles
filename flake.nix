@@ -48,7 +48,6 @@
     packages.x86_64-linux.statix = inputs.statix.packages.x86_64-linux.default;
     packages.x86_64-linux.deadnix = inputs.deadnix.packages.x86_64-linux.default;
 
-
     # -- DEV SHELL --
     devShells.x86_64-linux.default = inputs.nixpkgs.legacyPackages.x86_64-linux.mkShell {
       packages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
