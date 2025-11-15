@@ -1,7 +1,9 @@
 # modules/system/shell-aliases.nix
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   environment.shellAliases = {
     # laptop rebuild commands
     nrs = "sudo nixos-rebuild switch --flake /etc/nixos#laptop";

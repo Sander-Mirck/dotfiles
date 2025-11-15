@@ -1,7 +1,10 @@
 # modules/home-manager/sander.nix
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./programs/git.nix
     ./programs/neovim.nix
@@ -18,4 +21,6 @@
   home.homeDirectory = "/home/sander";
 
   programs.home-manager.enable = true;
+
+  home.stateVersion = "25.05";
 }

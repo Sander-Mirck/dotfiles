@@ -1,10 +1,13 @@
 # /etc/nixos/hosts/nixos/default.nix
 #
 # Main configuration file for the 'nixos' host.
-
-{ config, pkgs, lib, inputs, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     # Hardware configuration for this machine.
     ./hardware-configuration.nix
@@ -27,7 +30,7 @@
 
   # Nix settings
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Keep this pinned to the release you installed against.
   system.stateVersion = "25.05";

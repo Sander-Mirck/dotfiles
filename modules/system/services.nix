@@ -1,8 +1,10 @@
 # /etc/nixos/hosts/nixos/services.nix
 # System services
-{ pkgs, lib, ... }:
-
 {
+  pkgs,
+  lib,
+  ...
+}: {
   # X11 + GNOME (GDM defaults to Wayland; Xorg as fallback)
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
@@ -32,6 +34,6 @@
   # Use GNOME's portal backend (better with Mutter/Wayland than gtk fallback)
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    extraPortals = [pkgs.xdg-desktop-portal-gnome];
   };
 }

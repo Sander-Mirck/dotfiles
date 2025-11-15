@@ -1,4 +1,7 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   services.ssh-agent.enable = true;
 }

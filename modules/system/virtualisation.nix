@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.qemu.package = pkgs.qemu_kvm;
 
@@ -13,5 +16,5 @@
     dnsmasq
   ];
 
-  networking.firewall.allowedTCPPorts = [ 16509 ];
+  networking.firewall.allowedTCPPorts = [16509];
 }

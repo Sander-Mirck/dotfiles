@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ... }:
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ../modules/system/boot.nix
     ../modules/system/networking.nix
@@ -8,6 +12,6 @@
   ];
 
   nixpkgs.config.allowUnfree = false;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
   system.stateVersion = "25.05";
 }

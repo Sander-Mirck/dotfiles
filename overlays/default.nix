@@ -2,7 +2,6 @@
 #
 # This file is for Nixpkgs overlays. Overlays are used to
 # customize packages, such as applying patches or changing build options.
-
 self: super: {
   # Example: Add a custom command-line argument to google-chrome
   # google-chrome = super.google-chrome.override {

@@ -1,7 +1,10 @@
 # modules/system/security-performance.nix
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   # Security limits
   security.pam.loginLimits = [
     {

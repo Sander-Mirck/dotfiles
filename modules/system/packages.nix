@@ -1,7 +1,10 @@
 # Package management and system packages
-{ config, pkgs, lib, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   # Categorized package groups
   core-utils = with pkgs; [
     git
@@ -75,19 +78,18 @@ let
   ];
 
   all-packages =
-    core-utils ++
-    development ++
-    editors-ide ++
-    system-monitoring ++
-    communication ++
-    multimedia ++
-    gaming ++
-    gnome-desktop ++
-    security-system ++
-    terminals ++
-    [ pkgs.firefox ];
-in
-{
+    core-utils
+    ++ development
+    ++ editors-ide
+    ++ system-monitoring
+    ++ communication
+    ++ multimedia
+    ++ gaming
+    ++ gnome-desktop
+    ++ security-system
+    ++ terminals
+    ++ [pkgs.firefox];
+in {
   environment.systemPackages = all-packages;
 
   programs.firefox = {

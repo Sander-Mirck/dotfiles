@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 1800;

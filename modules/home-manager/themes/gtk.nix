@@ -1,10 +1,13 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   gtk = {
     enable = true;
     theme = {
       name = "Adwaita-dark";
-      package = pkgs.gnome.gnome-themes-extra;
+      package = pkgs.gnome-themes-extra; # ✅ fixed
     };
     iconTheme = {
       name = "Papirus";
