@@ -29,6 +29,9 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.sander = import ./modules/home-manager/sander.nix;
+
+            # Global Home Manager options
+            home-manager.backupFileExtension = "backup";
           }
 
           # Overlays
@@ -50,6 +53,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
           }
         ];
       };
