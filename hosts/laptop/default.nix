@@ -1,6 +1,3 @@
-# /etc/nixos/hosts/nixos/default.nix
-#
-# Main configuration file for the 'nixos' host.
 {
   config,
   pkgs,
@@ -9,10 +6,9 @@
   ...
 }: {
   imports = [
-    # Hardware configuration for this machine.
     ./hardware-configuration.nix
 
-    # System-wide modules.
+    # System-wide modules
     ../../modules/system/boot.nix
     ../../modules/system/networking.nix
     ../../modules/system/locale.nix
@@ -25,13 +21,12 @@
     ../../modules/system/security-performance.nix
     ../../modules/system/shell-aliases.nix
 
-    # Do NOT import Home Manager here; it is imported at the flake top-level.
+    # Desktop environment
+    ../../modules/system/desktop/kde.nix
   ];
 
-  # Nix settings
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  # Keep this pinned to the release you installed against.
   system.stateVersion = "25.05";
 }
