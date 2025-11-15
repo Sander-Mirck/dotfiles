@@ -1,10 +1,14 @@
+# modules/system/networking.nix
 # Networking configuration
 {
   config,
   pkgs,
+  lib, # <-- Add lib to the arguments
   ...
 }: {
-  networking.hostName = "nixos";
+  # Set a default hostname that can be overridden by specific hosts.
+  networking.hostName = lib.mkDefault "nixos"; # <-- Wrap the value here
+
   networking.networkmanager.enable = true;
 
   # Security improvements
