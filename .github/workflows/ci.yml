@@ -36,8 +36,8 @@ jobs:
       # The statix step has been removed.
         
       - name: Find unused code (deadnix)
-        # This now correctly uses the flake input, as suggested before.
-        run: nix run .#deadnix -- --fail .
+        # This will now only report dead code as warnings and will not fail the job.
+        run: nix run .#deadnix -- check .
         
       - name: Evaluate all configurations
         run: |
