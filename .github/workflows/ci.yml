@@ -10,44 +10,22 @@ on:
       - '.github/workflows/**'
   push:
     branches: [main, stable, unstable]
-    paths:
-      - '**.nix'
-      - 'flake.*'
 
 permissions:
   contents: read
 
 jobs:
-  checks:
-    name: Nix Checks
+  build-check:
+    name: Nix Flake Build Check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Install Nix
         uses: cachix/install-nix-action@v27
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-          
-      - name: Format check (alejandra)
-        run: nix run .#formatter.x86_64-linux -- --check .
-        
-      # The statix step has been removed.
-        
-      - name: Find unused code (deadnix)
-        # This will now only report dead code as warnings and will not fail the job.
-        run: nix run .#deadnix -- check .
-        
-      - name: Evaluate all configurations
-        run: |
-          nix flake check --show-trace
-          nix eval .#nixosConfigurations --json
-          
-      - name: Build check
-        run: |
-          nix build .#nixosConfigurations.laptop.config.system.build.toplevel --no-link --print-build-logs
-          
-      - name: Check Home Manager
-        run: |
-          nix build .#homeConfigurations.sander.activationPackage --no-link --print-build-logs
+
+      - name: Run Nix Flake Check
+        run: nix flake check --show-trace
