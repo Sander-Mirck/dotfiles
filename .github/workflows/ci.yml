@@ -2,18 +2,34 @@ name: NixOS CI
 
 on:
   pull_request:
-    branches:
-      - stable
+    branches: [ stable, unstable ]
+    paths:
+      - '**.nix'
+      - 'flake.*'
+      - '.github/workflows/**'
+  push:
+    branches: [ stable, unstable ]
     paths:
       - '**.nix'
       - 'flake.*'
 
-jobs:
-  nix-checks:
-    runs-on: ubuntu-latest
+permissions:
+  contents: read
 
+env:
+  # Toggle Cachix; set CACHIX_NAME secret if using
+  USE_CACHIX: ${{ secrets.CACHIX_NAME != '' }}
+  # Your flake’s default system
+  SYSTEM: x86_64-linux
+  # Hosts defined in flake.nix outputs.nixosConfigurations
+  HOSTS: '["laptop","server"]'
+
+jobs:
+  format-lint:
+    name: Format and lint
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install Nix
@@ -21,14 +37,132 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
 
-      - name: Show Nix version
+      - name: Restore Nix store build cache (best-effort)
+        uses: actions/cache@v4
+        with:
+          path: /nix/store
+          key: nix-store-${{ runner.os }}-${{ hashFiles('flake.lock') }}
+          restore-keys: |
+            nix-store-${{ runner.os }}-
+
+      - name: Use Cachix (optional)
+        if: env.USE_CACHIX == 'true'
+        uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Alejandra format check
+        run: nix run .#formatter.${{ env.SYSTEM }} -- --check .
+
+      - name: Deadnix
+        run: nix run nixpkgs#deadnix -- --fail .
+
+      - name: Statix
+        run: nix run nixpkgs#statix -- check .
+
+  flake-check:
+    name: Flake check and health
+    runs-on: ubuntu-latest
+    needs: [format-lint]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Use Cachix (optional)
+        if: env.USE_CACHIX == 'true'
+        uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Nix version
         run: nix --version
 
-      - name: Run nix fmt
-        run: nix fmt .
+      - name: Doctor
+        run: nix doctor
 
-      - name: Run flake check
+      - name: Flake format check
+        run: nix fmt -- --check .
+
+      - name: Flake checks
         run: nix flake check --show-trace
 
-      - name: Dry build system configuration
-        run: nix build .#nixosConfigurations.nixos.config.system.build.toplevel
+  build-hosts:
+    name: Build NixOS hosts
+    runs-on: ubuntu-latest
+    needs: [flake-check]
+    strategy:
+      fail-fast: false
+      matrix:
+        host: ["laptop","server"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Use Cachix (optional)
+        if: env.USE_CACHIX == 'true'
+        uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build system closure
+        run: nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --print-build-logs
+
+      - name: Show result
+        run: ls -la result
+
+      - name: Upload closure as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nixos-${{ matrix.host }}-toplevel
+          path: result
+
+  build-home:
+    name: Build Home Manager profiles
+    runs-on: ubuntu-latest
+    needs: [flake-check]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Use Cachix (optional)
+        if: env.USE_CACHIX == 'true'
+        uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build HM for sander on laptop
+        run: nix build .#nixosConfigurations.laptop.config.home-manager.users.sander.home.activationPackage
+
+      - name: Upload HM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-manager-sander-laptop
+          path: result
+
+  summary:
+    name: CI summary
+    runs-on: ubuntu-latest
+    needs: [build-hosts, build-home]
+    steps:
+      - name: Print summary
+        run: |
+          echo "All checks and builds finished."

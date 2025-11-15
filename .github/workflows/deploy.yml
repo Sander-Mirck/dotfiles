@@ -1,0 +1,108 @@
+name: NixOS Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: Host to deploy (e.g., laptop or server)
+        required: true
+        type: choice
+        options:
+          - laptop
+          - server
+      dry_run:
+        description: Dry-run only (no switch)
+        required: true
+        type: boolean
+        default: true
+  push:
+    branches: [ stable ]
+    paths:
+      - '**.nix'
+      - 'flake.*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}-${{ inputs.host || 'auto' }}
+  cancel-in-progress: false
+
+env:
+  SYSTEM: x86_64-linux
+  USE_CACHIX: ${{ secrets.CACHIX_NAME != '' }}
+
+jobs:
+  build:
+    name: Build target host
+    runs-on: ubuntu-latest
+    outputs:
+      store_path: ${{ steps.store.outputs.store_path }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Use Cachix (optional)
+        if: env.USE_CACHIX == 'true'
+        uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build system
+        run: nix build .#nixosConfigurations.${{ inputs.host }}.config.system.build.toplevel --print-build-logs
+
+      - name: Capture store path
+        id: store
+        run: echo "store_path=$(readlink -f result)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload closure
+        uses: actions/upload-artifact@v4
+        with:
+          name: nixos-${{ inputs.host }}-toplevel
+          path: result
+
+  deploy:
+    name: Deploy to host via SSH
+    runs-on: ubuntu-latest
+    needs: [build]
+    environment:
+      name: production
+      url: https://example.invalid/${{ inputs.host }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Prepare SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+
+      - name: Install Nix (deploy runner)
+        uses: cachix/install-nix-action@v27
+
+      - name: Copy closure to target (nix copy)
+        run: |
+          nix copy \
+            --to ssh-ng://${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            ${{ needs.build.outputs.store_path }}
+
+      - name: Activate (dry-run or switch)
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+              sudo nix-env -p /nix/var/nix/profiles/system --set ${{ needs.build.outputs.store_path }} && \
+              echo "Dry-run set: not switching."
+          else
+            ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+              sudo nix-env -p /nix/var/nix/profiles/system --set ${{ needs.build.outputs.store_path }} && \
+              ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+              sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+          fi
