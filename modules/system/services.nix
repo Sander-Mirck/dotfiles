@@ -2,8 +2,7 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   # Printing
   services.printing.enable = true;
 
