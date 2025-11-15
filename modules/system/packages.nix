@@ -13,6 +13,7 @@
     eza # Modern ls replacement
     fd
     git
+    mtr # Moved here from programs
     ripgrep
     tmux
     tree
@@ -62,8 +63,10 @@
 
   security-system = with pkgs; [
     gnupg
+    nmap # Moved here from programs
     pciutils
     usbutils
+    wireshark # Moved here from programs
   ];
 
   system-monitoring = with pkgs; [
@@ -125,9 +128,6 @@ in {
     '';
 
     # Enable useful network utilities
-    mtr.enable = true;
-    nmap.enable = true;
-    wireshark.enable = true;
     command-not-found.enable = true;
   };
 
