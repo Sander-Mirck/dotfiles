@@ -1,20 +1,24 @@
-# flake.nix
+# /flake.nix
 {
   description = "Sander's NixOS Configuration";
 
   inputs = {
+    # Use nixos-unstable for the latest packages and features.
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # home-manager for declarative user-level package management.
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # deadnix for identifying and removing unused Nix code.
     deadnix = {
       url = "github:astro/deadnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # flake-utils for boilerplate reduction across systems.
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -25,19 +29,19 @@
     flake-utils,
     ...
   } @ inputs: let
-    # Define lib at the top level so it's accessible everywhere
+    # Import custom library functions.
     lib = import ./lib {inherit inputs;};
   in
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-      # -- FORMATTER --
+      # Default formatter for `nix fmt`.
       formatter = pkgs.alejandra;
 
-      # -- LINTER --
+      # Linter to detect dead code.
       packages.deadnix = inputs.deadnix.packages.${system}.default;
 
-      # -- DEV SHELL --
+      # Development shell with essential tools.
       devShells.default = pkgs.mkShell {
         packages = [
           pkgs.git
@@ -48,7 +52,7 @@
       };
     })
     // {
-      # -- NIXOS CONFIGURATIONS --
+      # NixOS system configurations, defined per host.
       nixosConfigurations = {
         laptop = lib.mkNixosSystem {
           system = "x86_64-linux";
@@ -57,7 +61,7 @@
         };
       };
 
-      # -- HOME MANAGER CONFIGURATIONS --
+      # Standalone home-manager configurations.
       homeConfigurations = {
         sander = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;

@@ -1,6 +1,5 @@
-# roles/common.nix
-#
-# Common settings applied to all systems.
+# /roles/common.nix
+# This role defines the base configuration applied to all systems.
 {
   config,
   pkgs,
@@ -16,10 +15,12 @@
     ../modules/system/user-sander.nix
   ];
 
-  # Basic Nix settings
+  # Enable flakes and nix-command features.
   nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  # Allow proprietary software.
   nixpkgs.config.allowUnfree = true;
 
-  # Set the system state version.
+  # Set the system's state version to ensure configuration compatibility.
   system.stateVersion = "25.05";
 }

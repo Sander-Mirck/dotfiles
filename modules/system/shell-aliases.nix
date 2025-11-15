@@ -1,20 +1,21 @@
-# modules/system/shell-aliases.nix
+# /modules/system/shell-aliases.nix
 {
   config,
   pkgs,
   ...
 }: {
+  # Define convenient shell aliases for system management.
   environment.shellAliases = {
-    # Use a relative path for flake commands so it works from within the config dir.
+    # NixOS rebuild commands using the current host's configuration.
     nrs = "sudo nixos-rebuild switch --flake .#${config.networking.hostName}";
     nrsu = "sudo nixos-rebuild switch --upgrade --flake .#${config.networking.hostName}";
     nrb = "sudo nixos-rebuild boot --flake .#${config.networking.hostName}";
     nrt = "sudo nixos-rebuild test --flake .#${config.networking.hostName}";
 
-    # Nix garbage collection
+    # Garbage collection.
     nrgc = "sudo nix-collect-garbage -d";
 
-    # Utility aliases
+    # Common utilities.
     ll = "ls -la";
     update = "nrsu";
   };

@@ -1,4 +1,4 @@
-# .github/workflows/ci.yml
+# /.github/workflows/ci.yml
 name: NixOS CI
 
 on:
@@ -27,5 +27,6 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
 
+      # This step evaluates the entire flake to ensure all configurations are valid.
       - name: Run Nix Flake Check
         run: nix flake check --show-trace

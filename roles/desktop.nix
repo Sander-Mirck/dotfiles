@@ -1,6 +1,5 @@
-# roles/desktop.nix
-#
-# Configures a full desktop environment.
+# /roles/desktop.nix
+# This role configures a complete graphical desktop environment.
 {
   config,
   pkgs,
@@ -8,17 +7,17 @@
   ...
 }: {
   imports = [
-    # Import common settings.
+    # Include the base system configuration.
     ./common.nix
 
-    # Import desktop-specific modules.
+    # Import modules specific to a desktop setup.
     ../modules/system/audio.nix
     ../modules/system/packages.nix
     ../modules/system/services.nix
     ../modules/system/shell-aliases.nix
     ../modules/system/desktop/kde.nix
 
-    # Import package sets
+    # Import package sets for a desktop environment.
     ../modules/system/packages/cli-tools.nix
     ../modules/system/packages/development.nix
     ../modules/system/packages/desktop-apps.nix

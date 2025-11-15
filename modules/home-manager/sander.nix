@@ -1,4 +1,4 @@
-# modules/home-manager/sander.nix
+# /modules/home-manager/sander.nix
 {
   config,
   pkgs,
@@ -7,35 +7,31 @@
   ...
 }: {
   imports = [
-    # Programs
+    # User-specific program configurations.
     ./programs/git.nix
     ./programs/neovim.nix
     ./programs/shell.nix
 
-    # Services
+    # User-level services.
     ./services/gpg-agent.nix
     ./services/ssh-agent.nix
 
-    # Themes
+    # Theming and appearance.
     ./themes/gtk.nix
-
-    # Desktop integration (assuming you might have one, e.g., kde.nix)
-    # ./desktop/kde.nix
   ];
 
-  # --- User Info ---
+  # Basic user and home directory settings.
   home.username = "sander";
   home.homeDirectory = "/home/sander";
 
-  # --- Home Manager ---
+  # Enable home-manager.
   programs.home-manager.enable = true;
 
-  # --- State Version ---
+  # Set the state version for home-manager.
   home.stateVersion = "25.05";
 
-  # --- User-specific Packages ---
+  # Install packages directly into the user's profile.
   home.packages = with pkgs; [
-    # Development tools for Neovim LSP and other needs
     (python3.withPackages (ps:
       with ps; [
         pip
@@ -44,10 +40,7 @@
         virtualenv
       ]))
     lua-language-server
-    # Note: nodejs, nil, and nixd are already in your system packages.
-
-    # Utilities
-    eza # Modern ls replacement
+    eza
     fzf
     bat
     ripgrep
@@ -58,7 +51,7 @@
     btop
   ];
 
-  # --- Environment Variables ---
+  # Set user-specific environment variables.
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";

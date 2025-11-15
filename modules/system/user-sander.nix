@@ -1,23 +1,21 @@
-# modules/system/user-sander.nix
-# User configuration for sander
+# /modules/system/user-sander.nix
 {
   config,
   pkgs,
   lib,
   ...
 }: {
+  # Defines the primary user account for the system.
   users.users.sander = {
     isNormalUser = true;
     description = "Sander Mirck";
     extraGroups = ["networkmanager" "wheel" "docker" "libvirtd"];
 
-    # Set a password.
-    # For better security, you can generate a hash using `mkpasswd -m sha-512`
-    # and set `hashedPassword` instead of `initialPassword`.
-    initialPassword = "temp"; # Change this to a secure password
+    # Set an initial password. For better security, replace this with `hashedPassword`.
+    initialPassword = "temp";
 
     openssh.authorizedKeys.keys = [
-      # Add your SSH public keys here
+      # Add public SSH keys here for remote access.
     ];
   };
 }

@@ -1,4 +1,4 @@
-# hosts/laptop/default.nix
+# /hosts/laptop/default.nix
 {
   config,
   pkgs,
@@ -7,14 +7,14 @@
   ...
 }: {
   imports = [
-    # Import hardware-specific configuration.
+    # Import the auto-generated hardware configuration.
     ./hardware-configuration.nix
 
-    # Import the roles that define this machine.
+    # Assign roles to this host to build its functionality.
     ../../roles/desktop.nix
     ../../roles/dev.nix
   ];
 
-  # Host-specific settings can go here.
+  # Set the hostname for this specific machine.
   networking.hostName = "laptop";
 }

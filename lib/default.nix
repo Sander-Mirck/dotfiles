@@ -1,34 +1,37 @@
-# lib/default.nix
+# /lib/default.nix
 {inputs, ...}: let
-  # Helper function to generate a NixOS system configuration
+  # A helper function to construct a NixOS system configuration.
+  # It standardizes the inclusion of home-manager, overlays, and passes flake inputs.
   mkNixosSystem = {
     system ? "x86_64-linux",
     modules,
-    username, # The primary username for this system
+    username,
   }:
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
 
-      # Pass flake inputs to all modules.
+      # Pass flake inputs to all modules for easy access.
       specialArgs = {inherit inputs;};
 
       modules = [
-        # Import the host-specific modules.
+        # Import the host-specific configuration.
         modules
 
-        # Add Home Manager support.
+        # Integrate home-manager into the NixOS build.
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          # Pass flake inputs to home-manager modules.
           home-manager.extraSpecialArgs = {inherit inputs;};
-          # Import the user's home-manager configuration.
           home-manager.users.${username} = import ../modules/home-manager/${username}.nix;
         }
 
-        # Apply custom overlays.
-        ({config, pkgs, ...}: {
+        # Apply custom package overlays.
+        ({
+          config,
+          pkgs,
+          ...
+        }: {
           nixpkgs.overlays = [
             (import ../overlays)
           ];
@@ -36,5 +39,6 @@
       ];
     };
 in {
+  # Expose the helper function to the rest of the configuration.
   inherit mkNixosSystem;
 }
