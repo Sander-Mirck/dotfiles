@@ -1,4 +1,3 @@
-# /flake.nix
 {
   description = "Sander's NixOS Configuration";
 
