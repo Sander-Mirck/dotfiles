@@ -46,7 +46,7 @@
     devShells.x86_64-linux.default = inputs.nixpkgs.legacyPackages.x86_64-linux.mkShell {
       packages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
         git
-        nil 
+        nil
         alejandra
         # statix package has been removed from the dev shell.
         inputs.deadnix.packages.x86_64-linux.default
