@@ -1,20 +1,12 @@
-# /etc/nixos/hosts/nixos/services.nix
-# System services
 {
   pkgs,
   lib,
   ...
 }: {
-  # X11 + GNOME (GDM defaults to Wayland; Xorg as fallback)
-  services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
-  services.xserver.xkb.layout = "us";
-
   # Printing
   services.printing.enable = true;
 
-  # Flatpak system-wide.
+  # Flatpak system-wide
   services.flatpak.enable = true;
 
   # Network mesh/VPNs
@@ -22,7 +14,6 @@
   services.netbird.enable = true;
 
   # Keyring & storage
-  services.gnome.gnome-keyring.enable = true;
   services.udisks2.enable = true;
 
   # Journald limits
@@ -31,9 +22,6 @@
     SystemMaxFileSize=10M
   '';
 
-  # Use GNOME's portal backend (better with Mutter/Wayland than gtk fallback)
-  xdg.portal = {
-    enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gnome];
-  };
+  # Generic portal support (desktop-specific portals are handled in your desktop module)
+  xdg.portal.enable = true;
 }
