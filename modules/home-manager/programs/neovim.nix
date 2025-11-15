@@ -9,10 +9,6 @@
     enable = true;
     package = pkgs.neovim-unwrapped;
 
-    # Do not use wrapper provider flags on this nixpkgs; install providers explicitly.
-    # withNodeJs = true;
-    # withPython3 = true;
-
     extraConfig = ''
       set number
       set relativenumber
@@ -34,14 +30,9 @@
     ];
   };
 
-  # IMPORTANT: install only one Python derivation to avoid bin collisions.
-  # Remove any other `python3` or `python3.withPackages` entries from other HM files.
-  home.packages = with pkgs; [
-    nodejs
-    (python3.withPackages (ps: [ps.pip ps.setuptools ps.pynvim]))
-    lua
-    lua-language-server
-  ];
+  # The home.packages section has been removed from this file
+  # to prevent python environment collisions. The necessary packages
+  # are handled in modules/home-manager/sander.nix
 
   home.sessionVariables.EDITOR = "nvim";
 }
