@@ -15,6 +15,7 @@
     neovim
     obsidian
     vscodium
+    zed-editor
 
     # Nix Language Servers
     nil
