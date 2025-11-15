@@ -1,3 +1,4 @@
+# modules/system/packages.nix
 # Package management and system packages
 {
   config,
@@ -5,15 +6,11 @@
   lib,
   ...
 }: let
-  # ─── Package Groups ────────────────────────────────────────────────
+  # --- Package Groups ---
   core-utils = with pkgs; [
     bat
     curl
-<<<<<<< HEAD
-    eza  # Modern ls replacement
-=======
     eza # Modern ls replacement
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
     fd
     git
     ripgrep
@@ -32,9 +29,6 @@
     python3
     python3Packages.pip
     python3Packages.setuptools
-    nodejs
-    lua
-    # qwen-code  # If broken/not present on your nixpkgs rev, comment this out.
   ];
 
   editors-ide = with pkgs; [
@@ -43,7 +37,7 @@
     neovim
     obsidian
     vscodium
-    # Add Nix LSP support
+    # Nix Language Servers
     nil
     nixd
   ];
@@ -53,7 +47,6 @@
     netbird-ui
     tailscale
     vesktop
-    # whatsapp-electron  # frequently broken; uncomment if you confirm it builds on your rev
   ];
 
   kde-desktop = with pkgs; [
@@ -65,12 +58,6 @@
     prismlauncher
   ];
 
-  multimedia = with pkgs; [
-    kdePackages.kdenlive
-    localsend
-    scrcpy
-  ];
-
   security-system = with pkgs; [
     gnupg
     pciutils
@@ -79,10 +66,10 @@
 
   system-monitoring = with pkgs; [
     btop
+    htop
     hddtemp
     nix-output-monitor
     smartmontools
-    htop
   ];
 
   terminals = with pkgs; [
@@ -90,19 +77,7 @@
     lazygit
   ];
 
-  # Optional packages that might be broken - conditionally include
-<<<<<<< HEAD
-  optional-packages = with pkgs; lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
-    # Add any optional packages here
-  ];
-=======
-  optional-packages = with pkgs;
-    lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
-      # Add any optional packages here
-    ];
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
-
-  # ─── Aggregate All Packages ────────────────────────────────────────
+  # --- Aggregate All Packages ---
   all-packages =
     core-utils
     ++ development
@@ -110,116 +85,49 @@
     ++ communication
     ++ kde-desktop
     ++ gaming
-    ++ multimedia
     ++ security-system
     ++ system-monitoring
     ++ terminals
-    ++ optional-packages
     ++ [pkgs.firefox];
 in {
-  # ─── System Packages ───────────────────────────────────────────────
+  # --- System Packages ---
   environment.systemPackages = all-packages;
 
-  # ─── Programs ──────────────────────────────────────────────────────
-  programs.firefox = {
-    enable = true;
-    package = pkgs.firefox;
-  };
+  # --- Program Configuration ---
+  programs = {
+    # Web Browser
+    firefox.enable = true;
 
-  programs.appimage = {
-    enable = true;
-    binfmt = true;
-  };
+    # AppImage support
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
 
-  # Enhanced bash configuration
-  programs.bash = {
-    interactiveShellInit = ''
+    # Default editor and terminal aliases
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+      viAlias = true;
+      vimAlias = true;
+    };
+
+    # Bash shell improvements
+    bash.interactiveShellInit = ''
       # Better tab completion
       bind 'set show-all-if-ambiguous on'
       bind 'TAB:menu-complete'
-<<<<<<< HEAD
-      
-      # Improved ls colors
-      export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
-    '';
-  };
-
-=======
 
       # Improved ls colors
       export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
     '';
-  };
 
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
-  programs.neovim = {
-    defaultEditor = false;
-    viAlias = true;
-    vimAlias = true;
-  };
-
-  # Enable useful system utilities
-  programs = {
+    # Enable useful system utilities
     mtr.enable = true;
     nmap.enable = true;
     wireshark.enable = true;
     command-not-found.enable = true;
   };
 
-  # ─── Environment Variables ─────────────────────────────────────────
+  # --- Environment Variables ---
   environment.variables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-    BROWSER = "firefox";
-    TERMINAL = "konsole";
-    PAGER = "bat";
-    MANPAGER = "bat";
-<<<<<<< HEAD
-=======
-  };
-
-  # ─── Nix Configuration ─────────────────────────────────────────────
-  nix = {
-    settings = {
-      # Enable flakes and nix-command
-      experimental-features = ["nix-command" "flakes"];
-
-      # Auto optimize store
-      auto-optimise-store = true;
-
-      # Build cores
-      cores = 0; # Use all available cores
-      max-jobs = "auto";
-    };
-
-    # Enable garbage collection
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
-  };
-
-  # ─── Nix Configuration ─────────────────────────────────────────────
-  nix = {
-    settings = {
-      # Enable flakes and nix-command
-      experimental-features = ["nix-command" "flakes"];
-      
-      # Auto optimize store
-      auto-optimise-store = true;
-      
-      # Build cores
-      cores = 0; # Use all available cores
-      max-jobs = "auto";
-    };
-    
-    # Enable garbage collection
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-  };
-}
