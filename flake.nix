@@ -24,12 +24,11 @@
           # Enable Home Manager as a NixOS module
           home-manager.nixosModules.home-manager
 
-          # User configuration
+          # User configuration with Home Manager
           {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
             home-manager.users.sander = import ./modules/home-manager/sander.nix;
-
-            # Global Home Manager options
-            home-manager.backupFileExtension = "backup";
           }
 
           # Overlays
@@ -46,6 +45,12 @@
           ./hosts/server
           ./profiles/server.nix
           home-manager.nixosModules.home-manager
+          
+          # Add basic Home Manager config for server if needed
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+          }
         ];
       };
     };
