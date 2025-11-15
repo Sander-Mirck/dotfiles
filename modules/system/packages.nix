@@ -1,4 +1,4 @@
-# Package management and system packages
+# modules/system/packages.nix
 {
   config,
   pkgs,
@@ -86,12 +86,6 @@
     lazygit
   ];
 
-  # Optional packages that might be broken - conditionally include
-  optional-packages = with pkgs;
-    lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs) [
-      # Add any optional packages here
-    ];
-
   # ─── Aggregate All Packages ────────────────────────────────────────
   all-packages =
     core-utils
@@ -104,8 +98,10 @@
     ++ security-system
     ++ system-monitoring
     ++ terminals
-    ++ optional-packages
-    ++ [pkgs.firefox];
+    ++ [
+      pkgs.firefox
+      pkgs.nmap
+    ];
 in {
   # ─── System Packages ───────────────────────────────────────────────
   environment.systemPackages = all-packages;
@@ -139,10 +135,9 @@ in {
     vimAlias = true;
   };
 
-  # Enable useful system utilities
+  # Enable useful system utilities (modules that actually exist)
   programs = {
     mtr.enable = true;
-    nmap.enable = true;
     wireshark.enable = true;
     command-not-found.enable = true;
   };
