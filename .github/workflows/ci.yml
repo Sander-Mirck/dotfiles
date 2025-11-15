@@ -1,3 +1,4 @@
+# .github/workflows/ci.yml
 name: NixOS CI
 
 on:
@@ -33,10 +34,12 @@ jobs:
         run: nix run .#formatter.x86_64-linux -- --check .
         
       - name: Lint (statix)
-        run: nix run github:nerdypepper/statix -- check .
+        # Use the statix package from your flake's outputs
+        run: nix run .#statix -- check .
         
       - name: Find unused code (deadnix)
-        run: nix run github:astro/deadnix -- --fail .
+        # Use the deadnix package from your flake's outputs
+        run: nix run .#deadnix -- --fail .
         
       - name: Evaluate all configurations
         run: |
