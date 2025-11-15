@@ -29,6 +29,8 @@
     python3
     python3Packages.pip
     python3Packages.setuptools
+    nodejs
+    lua
   ];
 
   editors-ide = with pkgs; [
@@ -122,7 +124,7 @@ in {
       export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
     '';
 
-    # Enable useful system utilities
+    # Enable useful network utilities
     mtr.enable = true;
     nmap.enable = true;
     wireshark.enable = true;
@@ -131,3 +133,33 @@ in {
 
   # --- Environment Variables ---
   environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    BROWSER = "firefox";
+    TERMINAL = "konsole";
+    PAGER = "bat";
+    MANPAGER = "bat";
+  };
+
+  # --- Nix Configuration ---
+  nix = {
+    settings = {
+      # Enable flakes and nix-command (already set in roles/common.nix but good to have here too)
+      experimental-features = ["nix-command" "flakes"];
+
+      # Auto optimize store
+      auto-optimise-store = true;
+
+      # Use all available cores for builds
+      cores = 0;
+      max-jobs = "auto";
+    };
+
+    # Enable automatic garbage collection
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+}

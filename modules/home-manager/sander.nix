@@ -1,3 +1,4 @@
+# modules/home-manager/sander.nix
 {
   config,
   pkgs,
@@ -10,51 +11,31 @@
     ./programs/git.nix
     ./programs/neovim.nix
     ./programs/shell.nix
-    
+
     # Services
     ./services/gpg-agent.nix
     ./services/ssh-agent.nix
-    
+
     # Themes
     ./themes/gtk.nix
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
-    # Desktop integration
-    ./desktop/kde.nix
+    # Desktop integration (assuming you might have one, e.g., kde.nix)
+    # ./desktop/kde.nix
   ];
 
-  # ─── User Info ───────────────────────────────────────────────
+  # --- User Info ---
   home.username = "sander";
   home.homeDirectory = "/home/sander";
 
-  # ─── Home Manager ────────────────────────────────────────────
+  # --- Home Manager ---
   programs.home-manager.enable = true;
 
-  # ─── State Version ───────────────────────────────────────────
+  # --- State Version ---
   home.stateVersion = "25.05";
 
-  # ─── Enhanced Home Configuration ─────────────────────────────
+  # --- User-specific Packages ---
   home.packages = with pkgs; [
-    # Development tools
-    nodejs
-<<<<<<< HEAD
-    (python3.withPackages (ps: with ps; [
-      pip
-      setuptools
-      pynvim
-      virtualenv
-    ]))
-    lua
-    lua-language-server
-    nil  # Nix LSP
-    nixd # Nix LSP server
-
-    # Utilities
-    eza  # Modern ls replacement
-=======
+    # Development tools for Neovim LSP and other needs
     (python3.withPackages (ps:
       with ps; [
         pip
@@ -62,14 +43,11 @@
         pynvim
         virtualenv
       ]))
-    lua
     lua-language-server
-    nil # Nix LSP
-    nixd # Nix LSP server
+    # Note: nodejs, nil, and nixd are already in your system packages.
 
     # Utilities
     eza # Modern ls replacement
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
     fzf
     bat
     ripgrep
@@ -80,7 +58,7 @@
     btop
   ];
 
-  # Better environment variables
+  # --- Environment Variables ---
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
@@ -89,24 +67,4 @@
     PAGER = "bat";
     MANPAGER = "bat";
   };
-
-  # Enable useful services
-  services = {
-    # SSH agent with better configuration
-    ssh-agent = {
-      enable = true;
-    };
-
-    # GPG agent with SSH support
-    gpg-agent = {
-      enable = true;
-      defaultCacheTtl = 1800;
-      enableSshSupport = true;
-      pinentryFlavor = "qt"; # Use Qt pinentry for KDE
-    };
-  };
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b74654d (feat: resolve flake inconsistencies and modernize configuration)
