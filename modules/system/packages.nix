@@ -5,71 +5,73 @@
   lib,
   ...
 }: let
-  # Categorized package groups
+  # ─── Package Groups ────────────────────────────────────────────────
+
   core-utils = with pkgs; [
-    git
-    wget
-    curl
-    unzip
-    tree
     bat
+    curl
     fd
+    git
     ripgrep
     tmux
+    tree
+    unzip
+    wget
     wl-clipboard
   ];
 
   development = with pkgs; [
+    godot_4
     python3
     python3Packages.pip
     python3Packages.setuptools
-    godot_4
     # qwen-code  # If broken/not present on your nixpkgs rev, comment this out.
   ];
 
   editors-ide = with pkgs; [
-    neovim
-    helix
     emacs
-    vscodium
+    helix
+    neovim
     obsidian
-  ];
-
-  system-monitoring = with pkgs; [
-    btop
-    smartmontools
-    hddtemp
-    nix-output-monitor
+    vscodium
   ];
 
   communication = with pkgs; [
+    cloudflared
+    netbird-ui
+    tailscale
     vesktop
     # whatsapp-electron  # frequently broken; uncomment if you confirm it builds on your rev
-    tailscale
-    netbird-ui
-    cloudflared
   ];
 
-  multimedia = with pkgs; [
-    kdePackages.kdenlive
-    scrcpy
-    localsend
+  gnome-desktop = with pkgs; [
+    flatpak
+    gnome-tweaks
+    ocs-url
   ];
 
   gaming = with pkgs; [
     prismlauncher
   ];
 
-  gnome-desktop = with pkgs; [
-    gnome-tweaks
-    flatpak
-    ocs-url
+  multimedia = with pkgs; [
+    kdePackages.kdenlive
+    localsend
+    scrcpy
+    stremio
   ];
 
   security-system = with pkgs; [
     gnupg
-    usbutils
     pciutils
+    usbutils
+  ];
+
+  system-monitoring = with pkgs; [
+    btop
+    hddtemp
+    nix-output-monitor
+    smartmontools
   ];
 
   terminals = with pkgs; [
@@ -77,33 +79,34 @@
     lazygit
   ];
 
+  # ─── Aggregate All Packages ────────────────────────────────────────
   all-packages =
     core-utils
     ++ development
     ++ editors-ide
-    ++ system-monitoring
     ++ communication
-    ++ multimedia
-    ++ gaming
     ++ gnome-desktop
+    ++ gaming
+    ++ multimedia
     ++ security-system
+    ++ system-monitoring
     ++ terminals
     ++ [pkgs.firefox];
 in {
+  # ─── System Packages ───────────────────────────────────────────────
   environment.systemPackages = all-packages;
 
+  # ─── Programs ──────────────────────────────────────────────────────
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
   };
 
-  # AppImage support
   programs.appimage = {
     enable = true;
     binfmt = true;
   };
 
-  # Terminal experience
   programs = {
     bash.interactiveShellInit = ''
       # Better tab completion
@@ -118,7 +121,7 @@ in {
     };
   };
 
-  # Environment variables
+  # ─── Environment Variables ─────────────────────────────────────────
   environment.variables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
