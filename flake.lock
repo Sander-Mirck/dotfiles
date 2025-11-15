@@ -90,6 +90,8 @@
       "locked": {
         "lastModified": 1762977756,
         "narHash": "sha256-4PqRErxfe+2toFJFgcRKZ0UI9NSIOJa+7RXVtBhy4KE=",
+        "lastModified": 1762363567,
+        "narHash": "sha256-YRqMDEtSMbitIMj+JLpheSz0pwEr0Rmy5mC7myl17xs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "c5ae371f1a6a7fd27823bc500d9390b38c05fa55",

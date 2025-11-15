@@ -10,14 +10,14 @@
     ./programs/git.nix
     ./programs/neovim.nix
     ./programs/shell.nix
-    
+
     # Services
     ./services/gpg-agent.nix
     ./services/ssh-agent.nix
-    
+
     # Themes
     ./themes/gtk.nix
-    
+
     # Desktop integration
     ./desktop/kde.nix
   ];
@@ -44,11 +44,11 @@
     ]))
     lua
     lua-language-server
-    nil  # Nix LSP
-    nixd # Nix LSP server
+    nil   # Nix LSP
+    nixd  # Nix LSP server
 
     # Utilities
-    eza  # Modern ls replacement
+    eza   # Modern ls replacement
     fzf
     bat
     ripgrep
