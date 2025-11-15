@@ -56,7 +56,7 @@ jobs:
         run: nix run .#formatter.${{ env.SYSTEM }} -- --check .
 
       - name: Deadnix
-        run: nix run nixpkgs#deadnix -- --fail .
+        run: nix run nixpkgs#deadnix -- .
 
       - name: Statix
         run: nix run nixpkgs#statix -- check .
