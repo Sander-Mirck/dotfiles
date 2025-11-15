@@ -57,7 +57,6 @@
     kdePackages.kdenlive
     localsend
     scrcpy
-    stremio
   ];
 
   security-system = with pkgs; [
