@@ -50,23 +50,6 @@
           })
         ];
       };
-
-      server = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
-        modules = [
-          ./hosts/server
-          ./profiles/server.nix
-          home-manager.nixosModules.home-manager
-
-          # Add basic Home Manager config for server if needed
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-          }
-        ];
-      };
     };
 
     # Formatter
