@@ -1,7 +1,8 @@
 # /lib/flake-modules/hosts.nix
 # This module defines all machine configurations and generates the
 # corresponding nixosConfigurations and homeConfigurations.
-{inputs, ...}: let
+{ inputs, ... }:
+let
   # Define all your hosts here.
   # Adding a new machine is as simple as adding a new entry to this set.
   hosts = {
@@ -21,7 +22,8 @@
   };
 
   # Helper function to generate a NixOS system configuration for a given host.
-  mkNixosSystem = host:
+  mkNixosSystem =
+    host:
     inputs.nixpkgs.lib.nixosSystem {
       inherit (host) system;
       specialArgs = {
@@ -46,12 +48,13 @@
         }
 
         # Apply custom package overlays.
-        {nixpkgs.overlays = [(import ../../overlays)];}
+        { nixpkgs.overlays = [ (import ../../overlays) ]; }
       ];
     };
 
   # Helper function to generate a standalone Home Manager configuration.
-  mkHomeConfiguration = host:
+  mkHomeConfiguration =
+    host:
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = import inputs.nixpkgs {
         system = host.system;
@@ -61,9 +64,10 @@
         inherit inputs;
         username = host.username;
       };
-      modules = [host.homeModule];
+      modules = [ host.homeModule ];
     };
-in {
+in
+{
   flake = {
     # Generate nixosConfigurations for each host defined above.
     nixosConfigurations = inputs.nixpkgs.lib.mapAttrs (name: host: mkNixosSystem host) hosts;
@@ -72,3 +76,5 @@ in {
     homeConfigurations = inputs.nixpkgs.lib.mapAttrs (name: host: mkHomeConfiguration host) hosts;
   };
 }
+
+# test
