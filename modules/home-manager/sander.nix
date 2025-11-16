@@ -13,6 +13,7 @@
     ./programs/ssh.nix
     ./programs/neovim.nix
     ./programs/shell.nix
+    ./programs/ghostty.nix
 
     # User-level services
     ./services/gpg-agent.nix
@@ -79,7 +80,7 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     BROWSER = "firefox";
-    TERMINAL = "konsole";
+    TERMINAL = "ghostty";
     PAGER = "bat";
     MANPAGER = "bat";
   };
