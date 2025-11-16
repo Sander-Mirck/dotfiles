@@ -3,11 +3,11 @@
 {
   config,
   pkgs,
-  lib, # <-- Add lib to the arguments
+  lib,
   ...
 }: {
   # Set a default hostname that can be overridden by specific hosts.
-  networking.hostName = lib.mkDefault "nixos"; # <-- Wrap the value here
+  networking.hostName = lib.mkDefault "nixos";
 
   networking.networkmanager.enable = true;
 

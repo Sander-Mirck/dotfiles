@@ -3,19 +3,17 @@
   config,
   lib,
   ...
-}:
-let
+}: let
   # Set this to false for security in production
   enableUnsafeNoPassword = false; # Just use a plain boolean here
-in
-{
+in {
   security.sudo.extraRules = lib.mkIf enableUnsafeNoPassword [
     {
-      users = [ "sander" ];
+      users = ["sander"];
       commands = [
         {
           command = "ALL";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
       ];
     }
