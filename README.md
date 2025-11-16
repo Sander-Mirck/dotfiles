@@ -4,40 +4,30 @@ Modular NixOS configuration with flakes and Home Manager.
 
 ## Quick Start
 
-**For daily use, always use a stable release.** The `main` branch is for active development and may break.
+**For daily use, use the `stable` branch.** The `unstable` branch is for active development and may contain breaking changes.
 
-### Stable Release (Recommended)
+| Branch | Use Case | Command |
+|--------|----------|---------|
+| **`stable`** | Daily use (recommended) | `nix flake init -t github:Sander-Mirck/dotfiles/stable` |
+| **`unstable`** | Development/testing | `nix flake init -t github:Sander-Mirck/dotfiles/unstable` |
 
-Stable releases are source code archives from GitHub Releases:
-
-1. Download the **latest** release: `https://github.com/Sander-Mirck/dotfiles/archive/refs/tags/v0.3.8.zip`
-2. Unzip and `cd` into the directory
-3. Run: `nix flake init -t .#laptop`
-
-New releases are published weekly. **Always check [GitHub Releases](https://github.com/Sander-Mirck/dotfiles/releases) for the latest version**—the URL above may be outdated.
-
-### Development Build
-For testing/contributing: `nix flake init -t github:Sander-Mirck/dotfiles`
+The `stable` branch is updated via pull request when changes are tested and ready.
 
 ## Repository Structure
 
 - `flake.nix`: Main entry point
-- `hosts/`: Machine configs (`laptop`, `server`)
-- `profiles/`: Reusable sets (`desktop`, `dev`)
-- `modules/`: Custom NixOS & Home Manager
+- `hosts/`: Machine-specific configs (`laptop`, `server`)
+- `profiles/`: Reusable configuration sets (`desktop`, `dev`)
+- `modules/`: Custom NixOS & Home Manager modules
 - `overlays/`: Package customizations
 - `secrets/`: Encrypted secrets (agenix)
 - `templates/`: Host templates
 
 ## Usage
 
+After initializing from your chosen branch:
+
 ```bash
-cd dotfiles-[version]
+cd /path/to/your/nixos-config
 sudo nixos-rebuild switch --flake .#laptop
 ```
-
-## Recent Releases
-
-- **v0.3.2 "Plasma Stable"**: KDE Plasma 6 + cleanup
-- **v0.3.1**: First modular release
-- **v0.3.0**: Initial structure
