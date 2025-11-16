@@ -76,5 +76,3 @@ in
     homeConfigurations = inputs.nixpkgs.lib.mapAttrs (name: host: mkHomeConfiguration host) hosts;
   };
 }
-
-# test
