@@ -5,7 +5,8 @@
   lib,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     # User-specific program configurations
     ./programs/git.nix
@@ -18,14 +19,17 @@
     ./services/ssh-agent.nix
   ];
 
-  # Basic user settings
+  # Basic user and home directory settings
   home.username = "sander";
+  home.homeDirectory = "/home/sander";
 
-  # Enable home-manager and set state version
+  # Enable home-manager and set the state version
   programs.home-manager.enable = true;
+
+  # THIS LINE IS CRUCIAL and was likely removed by accident.
   home.stateVersion = "25.05";
 
-  # Control GTK themes via KDE's dconf database for consistency
+  # Add this entire block to control GTK themes via KDE's database
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       gtk-theme = "Adwaita-dark";
@@ -35,6 +39,9 @@
 
   # Install packages directly into the user's profile
   home.packages = with pkgs; [
+    # Font for the new shell prompt
+    fira-code
+
     # Packages for GTK theming (needed by KDE)
     gnome-themes-extra # provides Adwaita-dark
     papirus-icon-theme # provides Papirus
@@ -44,13 +51,12 @@
 
     # Python environment
     (python3.withPackages (
-      ps:
-        with ps; [
-          pip
-          setuptools
-          pynvim
-          virtualenv
-        ]
+      ps: with ps; [
+        pip
+        setuptools
+        pynvim
+        virtualenv
+      ]
     ))
 
     # Development tools
