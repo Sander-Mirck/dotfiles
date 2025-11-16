@@ -16,19 +16,16 @@
     # User-level services
     ./services/gpg-agent.nix
     ./services/ssh-agent.nix
-
-    # The old ./themes/gtk.nix import is now gone
   ];
 
-  # Basic user and home directory settings
+  # Basic user settings
   home.username = "sander";
-  home.homeDirectory = "/home/sander";
 
-  # Enable home-manager
+  # Enable home-manager and set state version
   programs.home-manager.enable = true;
   home.stateVersion = "25.05";
 
-  # Add this entire block to control GTK themes via KDE's database
+  # Control GTK themes via KDE's dconf database for consistency
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       gtk-theme = "Adwaita-dark";
