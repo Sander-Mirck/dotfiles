@@ -1,4 +1,4 @@
-# modules/home-manager/programs/shell.nix
+# /modules/home-manager/programs/shell.nix
 {
   config,
   pkgs,
@@ -6,10 +6,20 @@
   ...
 }:
 {
+  # Enable Starship and tell it to automatically configure Zsh.
+  # This is all you need for the prompt.
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  # Configure the Zsh shell itself.
   programs.zsh = {
     enable = true;
 
-    # Add your new alias here
+    # The old 'initContent' block that loaded 'agnoster' has been completely removed.
+    # Starship's integration replaces it.
+
     shellAliases = {
       gsync = ''
         ( \
@@ -32,12 +42,7 @@
       '';
     };
 
-    initContent = ''
-      autoload -Uz promptinit
-      promptinit
-      prompt agnoster
-    '';
-
+    # These plugins are still great to have!
     plugins = [
       {
         name = "zsh-syntax-highlighting";
@@ -50,6 +55,7 @@
     ];
   };
 
+  # These tools integrate well with the shell.
   programs.fzf.enable = true;
   programs.bat.enable = true;
 }
