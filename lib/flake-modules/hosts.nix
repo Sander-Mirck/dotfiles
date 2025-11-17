@@ -20,6 +20,8 @@ let
     #   nixosModule = ../../hosts/server;
     # };
   };
+  # Import central options file.
+  globalOptions = import ../../config/options.nix;
 
   # Helper function to generate a NixOS system configuration for a given host.
   mkNixosSystem =
@@ -42,6 +44,8 @@ let
             extraSpecialArgs = {
               inherit inputs;
               username = host.username;
+              # Make the options available to all modules under the name 'options'.
+              options = globalOptions;
             };
             users.${host.username} = host.homeModule;
           };

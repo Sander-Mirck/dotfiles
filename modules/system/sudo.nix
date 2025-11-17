@@ -1,19 +1,22 @@
-# modules/system/sudo.nix
+# /modules/system/sudo.nix
+
+# Add `options` to the function arguments here
 {
   config,
   lib,
+  options,
   ...
-}: let
-  # Set this to false for security in production
-  enableUnsafeNoPassword = false; # Just use a plain boolean here
-in {
-  security.sudo.extraRules = lib.mkIf enableUnsafeNoPassword [
+}:
+{
+  # Use the value directly from your new options file.
+  # The `let` block is no longer needed.
+  security.sudo.extraRules = lib.mkIf options.enableUnsafeNoPassword [
     {
-      users = ["sander"];
+      users = [ "sander" ];
       commands = [
         {
           command = "ALL";
-          options = ["NOPASSWD"];
+          options = [ "NOPASSWD" ];
         }
       ];
     }
