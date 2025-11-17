@@ -16,6 +16,9 @@
   # Configure the Zsh shell itself.
   programs.zsh = {
     enable = true;
+    initExtra = ''
+      export PATH="$HOME/.local/bin:$PATH"
+    '';
 
     # The old 'initContent' block that loaded 'agnoster' has been completely removed.
     # Starship's integration replaces it.
