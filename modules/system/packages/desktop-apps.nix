@@ -1,5 +1,6 @@
 # modules/system/packages/desktop-apps.nix
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   environment.systemPackages = with pkgs; [
     # Communication
     cloudflared
@@ -10,6 +11,7 @@
     flatpak
     ocs-url
     firefox
+    kdenlive
 
     # Gaming
     prismlauncher
