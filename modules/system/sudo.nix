@@ -1,19 +1,21 @@
-# modules/system/sudo.nix
+# /modules/system/sudo.nix
+
+# We request `globalOptions` instead of `options` to avoid conflict
 {
   config,
   lib,
+  globalOptions,
   ...
-}: let
-  # Set this to false for security in production
-  enableUnsafeNoPassword = false; # Just use a plain boolean here
-in {
-  security.sudo.extraRules = lib.mkIf enableUnsafeNoPassword [
+}:
+{
+  # Use globalOptions to access your custom config
+  security.sudo.extraRules = lib.mkIf globalOptions.enableUnsafeNoPassword [
     {
-      users = ["sander"];
+      users = [ "sander" ];
       commands = [
         {
           command = "ALL";
-          options = ["NOPASSWD"];
+          options = [ "NOPASSWD" ];
         }
       ];
     }
