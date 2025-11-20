@@ -11,7 +11,6 @@
     flatpak
     ocs-url
     firefox
-    kdenlive
 
     # Gaming
     prismlauncher

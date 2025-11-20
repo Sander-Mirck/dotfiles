@@ -4,7 +4,6 @@
 { inputs, ... }:
 let
   # Define all your hosts here.
-  # Adding a new machine is as simple as adding a new entry to this set.
   hosts = {
     laptop = {
       system = "x86_64-linux";
@@ -12,14 +11,8 @@ let
       homeModule = ../../modules/home-manager/sander.nix;
       nixosModule = ../../hosts/laptop;
     };
-    # Example for a future machine:
-    # server = {
-    #   system = "aarch64-linux";
-    #   username = "admin";
-    #   homeModule = ../../modules/home-manager/admin.nix;
-    #   nixosModule = ../../hosts/server;
-    # };
   };
+
   # Import central options file.
   globalOptions = import ../../config/options.nix;
 
@@ -28,10 +21,14 @@ let
     host:
     inputs.nixpkgs.lib.nixosSystem {
       inherit (host) system;
+
+      # 1. We pass globalOptions here so System modules (like sudo.nix) can use it.
       specialArgs = {
         inherit inputs;
         username = host.username;
+        inherit globalOptions; # RENAME: Passing it as 'globalOptions' safely.
       };
+
       modules = [
         host.nixosModule
 
@@ -41,12 +38,14 @@ let
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+
             extraSpecialArgs = {
               inherit inputs;
               username = host.username;
-              # Make the options available to all modules under the name 'options'.
-              options = globalOptions;
+              # 2. We rename it here too, so Home Manager modules don't crash.
+              inherit globalOptions;
             };
+
             users.${host.username} = host.homeModule;
           };
         }
@@ -67,6 +66,7 @@ let
       extraSpecialArgs = {
         inherit inputs;
         username = host.username;
+        inherit globalOptions;
       };
       modules = [ host.homeModule ];
     };

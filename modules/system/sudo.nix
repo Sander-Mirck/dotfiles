@@ -1,16 +1,15 @@
 # /modules/system/sudo.nix
 
-# Add `options` to the function arguments here
+# We request `globalOptions` instead of `options` to avoid conflict
 {
   config,
   lib,
-  options,
+  globalOptions,
   ...
 }:
 {
-  # Use the value directly from your new options file.
-  # The `let` block is no longer needed.
-  security.sudo.extraRules = lib.mkIf options.enableUnsafeNoPassword [
+  # Use globalOptions to access your custom config
+  security.sudo.extraRules = lib.mkIf globalOptions.enableUnsafeNoPassword [
     {
       users = [ "sander" ];
       commands = [
