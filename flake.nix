@@ -12,12 +12,18 @@
       url = "github:astro/deadnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # --- NEW INPUT ---
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs:
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       # We specify which systems we want our configurations to build for.
-      systems = ["x86_64-linux"];
+      systems = [ "x86_64-linux" ];
 
       # Import modularized parts of our flake.
       imports = [

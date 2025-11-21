@@ -6,6 +6,13 @@
   ...
 }:
 {
+  # --- NEW: Tell Agenix where to find the decryption key ---
+  # We point this to the key you generated manually with ssh-keygen.
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
+  # Define the secret location
+  age.secrets.user-password.file = ../../secrets/user-password.age;
+
   users.users.sander = {
     isNormalUser = true;
     description = "Sander Mirck";
@@ -16,15 +23,14 @@
       "libvirtd"
     ];
 
-    # This is the new, crucial line that fixes everything.
-    # It sets your default login shell to Zsh.
+    # This sets your default login shell to Zsh.
     shell = pkgs.zsh;
 
-    # 🔒 SECURE: Use hashed password
-    hashedPassword = "$6$VUiEylEBRqJYd/7.$m6sXKpXOyEOYa4guwyO4BLNIqKYhNqb.9UR14zLaIyC4zv1x/86nQputX7RZ8.aRs.7QYwlFKZ7xmSgNlp1FO/";
+    # 🔒 SECURE: Use the secret file defined above.
+    hashedPasswordFile = config.age.secrets.user-password.path;
 
     openssh.authorizedKeys.keys = [
-      # Add your SSH keys here
+      # Add your SSH keys here if you ever want to SSH into this machine
       # "ssh-ed25519 AAAAC3Nza... your-comment"
     ];
   };

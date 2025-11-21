@@ -25,6 +25,8 @@
           pkgs.alejandra
           # self' refers to the outputs defined in this perSystem block.
           self'.packages.deadnix
+          # --- NEW: Agenix CLI tool ---
+          inputs.agenix.packages.${pkgs.system}.default
         ];
       };
     };
