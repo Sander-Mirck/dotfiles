@@ -1,6 +1,5 @@
 # /modules/home-manager/programs/ghostty.nix
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   programs.ghostty = {
     enable = true;
     # We are using the package from nixpkgs
