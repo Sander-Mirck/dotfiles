@@ -11,7 +11,7 @@
 !flake.lock
 
 # Secrets and sensitive data
-/secrets/
+/secrets/rekey/
 *.key
 *.gpg
 *.asc
@@ -22,9 +22,12 @@
 *.pfx
 *.env
 .envrc
-secrets.nix
 .password
 .credentials
+
+# Keep Agenix files tracked
+!secrets.nix
+!/secrets/*.age
 
 # Cache and temporary files
 .cache/

@@ -32,6 +32,9 @@ let
       modules = [
         host.nixosModule
 
+        # --- NEW: Import Agenix Module ---
+        inputs.agenix.nixosModules.default
+
         # Integrate Home Manager into the NixOS build.
         inputs.home-manager.nixosModules.home-manager
         {
