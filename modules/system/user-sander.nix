@@ -4,11 +4,10 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   # --- NEW: Tell Agenix where to find the decryption key ---
   # We point this to the key you generated manually with ssh-keygen.
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
 
   # Define the secret location
   age.secrets.user-password.file = ../../secrets/user-password.age;

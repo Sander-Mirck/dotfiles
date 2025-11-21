@@ -5,8 +5,7 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   imports = [
     ../modules/system/boot.nix
     ../modules/system/locale.nix

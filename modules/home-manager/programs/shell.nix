@@ -4,8 +4,7 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   # Enable Starship and tell it to automatically configure Zsh.
   # This is all you need for the prompt.
   programs.starship = {
