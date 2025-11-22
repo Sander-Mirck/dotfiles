@@ -39,18 +39,6 @@ in
   # Enable the KDE Plasma 6 desktop environment
   services.desktopManager.plasma6.enable = true;
 
-  # --- FIXES FOR DISCOVER ---
-  # Discover relies on PackageKit and fwupd.
-  services.packagekit.enable = true;
-  services.fwupd.enable = true;
-
-  # OPTIMIZATION: Start these services at boot.
-  # By default, they sleep until needed (D-Bus activation), causing the 2-3s delay
-  # when you open Discover. Adding them to multi-user.target ensures they are
-  # ready instantly when you log in.
-  systemd.services.packagekit.wantedBy = [ "multi-user.target" ];
-  systemd.services.fwupd.wantedBy = [ "multi-user.target" ];
-
   # Enable the KDE Wallet to securely store secrets like Git credentials.
   security.pam.services.sddm.enableKwallet = true;
 
@@ -61,8 +49,6 @@ in
     kdePackages.dolphin
     kdePackages.kate
     kdePackages.okular
-
-    # Explicitly include Discover to ensure it matches the Plasma 6 version
-    kdePackages.discover
+    kdePackages.partitionmanager
   ];
 }
