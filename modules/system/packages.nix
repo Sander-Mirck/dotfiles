@@ -1,6 +1,7 @@
 # modules/system/packages.nix
 # Program configurations and environment variables
-{...}: {
+{ ... }:
+{
   # --- Program Configuration ---
   programs = {
     firefox.enable = true;
@@ -32,7 +33,12 @@
     MANPAGER = "bat";
   };
 
-  # --- Nix Garbage Collection ---
+  # --- Nix Configuration & Garbage Collection ---
+  nix.settings = {
+    # Deduplicate files in the store to save space
+    auto-optimise-store = true;
+  };
+
   nix.gc = {
     automatic = true;
     dates = "weekly";

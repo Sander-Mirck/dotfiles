@@ -3,20 +3,36 @@
   config,
   pkgs,
   ...
-}: {
-  # Define convenient shell aliases for system management.
+}:
+{
   environment.shellAliases = {
-    # NixOS rebuild commands using the current host's configuration.
-    nrs = "sudo nixos-rebuild switch --flake .#${config.networking.hostName}";
-    nrsu = "sudo nixos-rebuild switch --upgrade --flake .#${config.networking.hostName}";
-    nrb = "sudo nixos-rebuild boot --flake .#${config.networking.hostName}";
-    nrt = "sudo nixos-rebuild test --flake .#${config.networking.hostName}";
+    # "switch" -> Apply the current configuration immediately
+    switch = "nh os switch /home/sander/nixos";
 
-    # Garbage collection.
-    nrgc = "sudo nix-collect-garbage -d";
+    # "update" -> Update flake inputs (download new packages) AND switch
+    update = "nh os switch --update /home/sander/nixos";
 
-    # Common utilities.
+    # "cleanup" -> Delete old generations (garbage collection)
+    cleanup = "nh clean all --keep 3";
+
+    # "try" -> Build and activate config, but don't add to bootloader (good for testing breakage)
+    try = "nh os test /home/sander/nixos";
+
+    # ---------------------------------------------------------
+    # Speed Aliases (3 letters, extremely fast)
+    # ---------------------------------------------------------
+    nos = "switch"; # (N)ix (O)S (S)witch
+    nup = "update"; # (N)ix (UP)date
+    ngc = "cleanup"; # (N)ix (G)arbage (C)ollect
+
+    # ---------------------------------------------------------
+    # Utilities
+    # ---------------------------------------------------------
     ll = "ls -la";
-    update = "nrsu";
+
+    # Safety: Prevent accidental overwrites
+    cp = "cp -i";
+    mv = "mv -i";
+    rm = "rm -i";
   };
 }
