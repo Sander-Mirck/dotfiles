@@ -4,17 +4,22 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   # Bootloader configuration
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    # Limit to the last 10 generations to prevent filling /boot
+    configurationLimit = 10;
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Early KMS for Intel to avoid GDM grey-screen and flicker
-  boot.initrd.kernelModules = ["i915"];
-  boot.initrd.availableKernelModules = lib.mkAfter ["i915"];
+  boot.initrd.kernelModules = [ "i915" ];
+  boot.initrd.availableKernelModules = lib.mkAfter [ "i915" ];
 
   # Prefer Wayland with GDM; keep X11 available but don’t force legacy "intel" DDX
-  services.xserver.videoDrivers = ["modesetting"];
+  services.xserver.videoDrivers = [ "modesetting" ];
 
   # Ensure OpenGL/Mesa path and VAAPI are enabled for Intel
   hardware.graphics = {
